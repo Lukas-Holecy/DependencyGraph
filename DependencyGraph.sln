@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyGraphGenerator", "DependencyGraphGenerator\DependencyGraphGenerator.csproj", "{FF9F3F4D-7F96-4B02-857A-8047B6A84E14}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyGraphGeneratorTests", "DependencyGraphGeneratorTests\DependencyGraphGeneratorTests.csproj", "{D1F6B79C-F1E2-4FF0-B9D3-C943034AE27E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF9F3F4D-7F96-4B02-857A-8047B6A84E14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF9F3F4D-7F96-4B02-857A-8047B6A84E14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF9F3F4D-7F96-4B02-857A-8047B6A84E14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF9F3F4D-7F96-4B02-857A-8047B6A84E14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1F6B79C-F1E2-4FF0-B9D3-C943034AE27E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1F6B79C-F1E2-4FF0-B9D3-C943034AE27E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1F6B79C-F1E2-4FF0-B9D3-C943034AE27E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1F6B79C-F1E2-4FF0-B9D3-C943034AE27E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E296036-2E65-44AC-8A35-4221D72B8407}
+	EndGlobalSection
+EndGlobal
