@@ -42,20 +42,19 @@ public class FileOrDirectoryInfoTests
         Assert.True(fileOrDirectoryInfo.IsDirectory);
     }
 
-    [Fact]
-    public void Constructor_ShouldInitializeAsNull_WhenPathDoesNotExist()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("nonexistent")]
+    public void Constructor_ShouldThrowArgumentNullException_WhenPathIsNotValid(string? path)
     {
         // Arrange
-        var path = "nonexistent";
         var mockFileSystem = new Mock<IFileSystem>();
         mockFileSystem.Setup(fs => fs.File.Exists(path)).Returns(false);
         mockFileSystem.Setup(fs => fs.Directory.Exists(path)).Returns(false);
 
-        // Act
-        var fileOrDirectoryInfo = new FileOrDirectoryInfo(path, mockFileSystem.Object);
-
         // Assert
-        Assert.Null(fileOrDirectoryInfo.FileSystemInfo);
-        Assert.False(fileOrDirectoryInfo.IsDirectory);
+        Assert.Throws<ArgumentException>(() => new FileOrDirectoryInfo(path!, mockFileSystem.Object));
     }
 }

@@ -4,7 +4,7 @@ using System.IO.Abstractions;
 
 internal class FileOrDirectoryInfo
 {
-    public IFileSystemInfo? FileSystemInfo { get; init; }
+    public IFileSystemInfo FileSystemInfo { get; init; }
 
     public bool IsDirectory { get; init; } = false;
 
