@@ -1,0 +1,9 @@
+<Project>
+    <PropertyGroup>
+        <Author>Lukas Holecy</Author>
+        <Company>Lukas Holecy</Company>
+        <LicenseUrl>https://opensource.org/licenses/MIT</LicenseUrl>
+        <Copyright>Copyright © MyCompany 2023</Copyright>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    </PropertyGroup>
+</Project>
