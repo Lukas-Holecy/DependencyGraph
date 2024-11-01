@@ -8,6 +8,7 @@
     <EnableDefaultMain>false</EnableDefaultMain>
     <DefaultNamespace>Holecy.Console.Dependencies</DefaultNamespace>
     <AssemblyName>DependencyGraphGenerator</AssemblyName>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
 </Project>
