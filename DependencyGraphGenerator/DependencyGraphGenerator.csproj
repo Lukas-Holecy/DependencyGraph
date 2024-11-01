@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <EnableDefaultMain>false</EnableDefaultMain>
-    <DefaultNamespace>Holecy.Console.Dependencies</DefaultNamespace>
+    <RootNamespace>Holecy.Console.Dependencies</RootNamespace>
     <AssemblyName>DependencyGraphGenerator</AssemblyName>
   </PropertyGroup>
 

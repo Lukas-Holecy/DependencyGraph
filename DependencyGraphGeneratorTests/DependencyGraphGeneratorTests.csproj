@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <EnableDefaultMain>false</EnableDefaultMain>
-    <DefaultNamespace>Holecy.Console.Dependencies.Tests</DefaultNamespace>
+    <RootNamespace>Holecy.Console.Dependencies.Tests</RootNamespace>
     <AssemblyName>DependencyGraphGeneratorTests</AssemblyName>
   </PropertyGroup>
 
