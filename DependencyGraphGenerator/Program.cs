@@ -1,14 +1,17 @@
 ﻿namespace Holecy.Console.Dependencies;
 
-using System;
+using CliFx;
 
 /// <summary>
 /// Entry point of the application.
 /// </summary>
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
-        Console.WriteLine("Hello World!");
+        return await new CliApplicationBuilder()
+            .AddCommandsFromThisAssembly()
+            .Build()
+            .RunAsync();
     }
 }
