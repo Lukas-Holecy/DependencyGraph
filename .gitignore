@@ -1,0 +1,99 @@
+# Ignore build output directories
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files and folders by Visual Studio and .NET
+.vscode/
+.vs/
+*.psess
+TestResults/
+*.dbmdl
+*.opendb
+*.jfm
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+# Uncomment if you have NuGet packages in a subdirectory
+# **/packages/*
+# NuGet v3's project.json files produces more ignorable files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Rider-specific files
+.idea/
+*.sln.iml
+
+# DotNet specific files
+.dotnet/
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code workspace and settings files
+.vscode/*
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Azure Pipelines
+*.yml
+# Azure DevOps
+*.yaml
+
+# File tracking dependencies, should not be committed
+packages.lock.json
+project.assets.json
+project.nuget.cache
+*.csproj.nuget.g.props
+*.csproj.nuget.g.targets
+
+# Publish output
+.publish/
+
+# npm packages and lock files (if using Node.js in the project)
+node_modules/
+package-lock.json
+yarn.lock
+
+# .NET Core or .NET 5+ User Secrets
+secrets.json
+
+# StyleCop and Roslyn analyzer files
+*.cache
+
+# Local history for Visual Studio
+.history/
+
+# OS-generated files
+.DS_Store
+*.swp
+._*
+
+# Docker specific files
+docker-compose.override.yml
+.env
+
+# Temp files
+*.tmp
+*.temp
+*.log
+*.log.*

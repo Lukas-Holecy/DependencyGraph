@@ -5,6 +5,9 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <EnableDefaultMain>false</EnableDefaultMain>
+    <DefaultNamespace>Holecy.Console.Dependencies</DefaultNamespace>
+    <AssemblyName>DependencyGraphGenerator</AssemblyName>
   </PropertyGroup>
 
 </Project>
