@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 [Command(Description = "Processes files or directories with optional logging and output.")]
 internal class ProcessCommand : ICommand
 {
-    private readonly IFileSystem fileSystem;
+    private readonly IFileSystem fileSystem = new FileSystem();
 
-    public ProcessCommand(IFileSystem fileSystem)
-    {
-        this.fileSystem = fileSystem;
-    }
+    // public ProcessCommand(IFileSystem fileSystem)
+    // {
+    //     this.fileSystem = fileSystem;
+    // }
 
     /// <summary>
     /// Positional parameter for paths (files or directories).
