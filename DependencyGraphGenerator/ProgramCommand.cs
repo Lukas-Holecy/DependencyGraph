@@ -8,27 +8,25 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 
-[Command(Description = "Processes files or directories with optional logging and output.")]
-internal class ProcessCommand : ICommand
+[Command]
+public class ProgramCommand : ICommand
 {
-    private readonly IFileSystem fileSystem = new FileSystem();
+    private readonly IFileSystem fileSystem;
 
-    // public ProcessCommand(IFileSystem fileSystem)
-    // {
-    //     this.fileSystem = fileSystem;
-    // }
+    public ProgramCommand(IFileSystem fileSystem)
+    {
+        this.fileSystem = fileSystem;
+    }
 
     /// <summary>
     /// Positional parameter for paths (files or directories).
     /// </summary>
     [CommandParameter(0, Name = "paths", Description = "Paths to directories or files to process.", IsRequired = true)]
-    public required IReadOnlyList<FileOrDirectoryInfo> Paths { get; init; }
+    public IReadOnlyList<FileOrDirectoryInfo> Paths { get; init; } = [];
 
-    // -l or --log switch to enable logging
-    [CommandOption("log", 'l', Description = "Enable logging.")]
+    [CommandOption("log", 'l', Description = "Enables logging.")]
     public bool EnableLogging { get; init; }
 
-    // --log-path option to set the path to the log file
     [CommandOption("log-path", Description = "Path to the log file.")]
     public string LogPath { get; init; } = string.Empty;
 
