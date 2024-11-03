@@ -15,7 +15,8 @@ public class Program
         var serviceProvider = SetUpDependencyInjection();
 
         return await new CliApplicationBuilder()
-            .AddCommand<ProgramCommand>()
+            .AddCommand<CommandLine.ProgramCommand>()
+            .AddCommand<CommandLine.ListProjectsCommand>()
             .UseTypeActivator(serviceProvider.GetService!)
             .Build()
             .RunAsync();
@@ -25,7 +26,8 @@ public class Program
     {
         var services = new ServiceCollection()
                     .AddSingleton<IFileSystem, FileSystem>()
-                    .AddTransient<ProgramCommand>();
+                    .AddTransient<CommandLine.ProgramCommand>()
+                    .AddTransient<CommandLine.ListProjectsCommand>();
 
 
         var serviceProvider = services.BuildServiceProvider();
