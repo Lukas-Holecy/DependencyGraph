@@ -14,6 +14,17 @@
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console":  "internalConsole"
+        },
+        {
+            "name": "List Projects",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
+            "args": ["list-projects", "${workspaceFolder}\\..\\..\\"],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console":  "internalConsole"
         }
     ]
 }

@@ -2,7 +2,7 @@ namespace Holecy.Console.Dependencies;
 
 using System.IO.Abstractions;
 
-public class FileOrDirectoryInfo
+internal class FileOrDirectoryInfo
 {
     public IFileSystemInfo FileSystemInfo { get; init; }
 

@@ -9,7 +9,7 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 
 [Command]
-public class ProgramCommand : ICommand
+internal class ProgramCommand : ICommand
 {
     private readonly IFileSystem fileSystem;
 
