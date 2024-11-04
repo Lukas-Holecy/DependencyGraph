@@ -4,6 +4,7 @@ using CliFx;
 using CliFx.Attributes;
 using CliFx.Exceptions;
 using CliFx.Infrastructure;
+using Holecy.Console.Dependencies.IO;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ internal class ProgramCommand : ICommand
     /// Positional parameter for paths (files or directories).
     /// </summary>
     [CommandParameter(0, Name = "paths", Description = "Paths to directories or files to process.", IsRequired = true)]
-    public IReadOnlyList<FileOrDirectoryInfo> Paths { get; init; } = [];
+    public IReadOnlyList<IFileOrDirectoryInfo> Paths { get; init; } = [];
 
     [CommandOption("log", 'l', Description = "Enables logging.")]
     public bool EnableLogging { get; init; }
