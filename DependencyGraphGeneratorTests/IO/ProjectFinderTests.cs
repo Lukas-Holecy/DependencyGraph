@@ -11,17 +11,35 @@ using Holecy.Console.Dependencies.IO;
 using Moq;
 using Xunit;
 
+/// <summary>
+/// Contains unit tests for the <see cref="ProjectFinder"/> class.
+/// </summary>
 public class ProjectFinderTests
 {
-    private readonly Mock<IFileSystem> mockFileSystem;
+    /// <summary>
+    /// Mock implementation of the <see cref="IFileSystem"/> interface.
+    /// Used to simulate file system operations in tests.
+    /// </summary>
+    private readonly Mock<IFileSystem> mockFileSystem = new Mock<IFileSystem>();
+
+    /// <summary>
+    /// Instance of <see cref="ProjectFinder"/> being tested.
+    /// </summary>
     private readonly ProjectFinder projectFinder;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ProjectFinderTests"/> class.
+    /// Sets up the necessary <see cref="ProjectFinder"/> instance.
+    /// </summary>
     public ProjectFinderTests()
     {
-        this.mockFileSystem = new Mock<IFileSystem>();
         this.projectFinder = new ProjectFinder(this.mockFileSystem.Object);
     }
 
+    /// <summary>
+    /// Tests that <see cref="ProjectFinder.FindProjects(IEnumerable{IFileOrDirectoryInfo})"/>
+    /// returns an empty collection when provided with an empty input.
+    /// </summary>
     [Fact]
     public void FindProjects_WithEmptyInput_ReturnsEmpty()
     {
@@ -35,6 +53,10 @@ public class ProjectFinderTests
         Assert.Empty(result);
     }
 
+    /// <summary>
+    /// Tests that <see cref="ProjectFinder.FindProjects(IEnumerable{IFileOrDirectoryInfo})"/> correctly
+    /// identifies and returns valid .csproj files when provided with a collection containing only files.
+    /// </summary>
     [Fact]
     public void FindProjects_WithOnlyFiles_ReturnsValidCsprojFiles()
     {
@@ -62,6 +84,10 @@ public class ProjectFinderTests
         Assert.Equal("Project1.csproj", result.First().FullName);
     }
 
+    /// <summary>
+    /// Tests that <see cref="ProjectFinder.FindProjects(IEnumerable{IFileOrDirectoryInfo})"/> correctly
+    /// identifies and returns .csproj files found within directories.
+    /// </summary>
     [Fact]
     public void FindProjects_WithDirectories_ReturnsCsprojFilesInDirectories()
     {
@@ -100,6 +126,10 @@ public class ProjectFinderTests
         Assert.Contains(result, f => f.FullName == "/path/to/directory/SubDir/Project2.csproj");
     }
 
+    /// <summary>
+    /// Tests that <see cref="ProjectFinder.FindProjects(IEnumerable{IFileOrDirectoryInfo})"/> correctly
+    /// identifies and returns all valid .csproj files from a mixed collection of files and directories.
+    /// </summary>
     [Fact]
     public void FindProjects_MixedFilesAndDirectories_ReturnsAllValidCsprojFiles()
     {
@@ -162,6 +192,10 @@ public class ProjectFinderTests
         // "InvalidProject.txt" should not be included
     }
 
+    /// <summary>
+    /// Tests that <see cref="ProjectFinder.FindProjects(IEnumerable{IFileOrDirectoryInfo})"/> returns an
+    /// empty collection for files that do not exist.
+    /// </summary>
     [Fact]
     public void FindProjects_WithNonExistingFile_ReturnsEmptyForThatFile()
     {
@@ -184,6 +218,10 @@ public class ProjectFinderTests
         Assert.Empty(result);
     }
 
+    /// <summary>
+    /// Tests that <see cref="ProjectFinder.FindProjectsInDirectory(IFileOrDirectoryInfo)"/> returns
+    /// an empty collection when no .csproj files are present in the specified directory.
+    /// </summary>
     [Fact]
     public void FindProjectsInDirectory_WithNoCsprojFiles_ReturnsEmpty()
     {
@@ -206,6 +244,10 @@ public class ProjectFinderTests
         Assert.Empty(result);
     }
 
+    /// <summary>
+    /// Tests that <see cref="ProjectFinder.FindProjects(IFileOrDirectoryInfo)"/> returns an empty collection
+    /// when a file with an invalid extension is provided.
+    /// </summary>
     [Fact]
     public void FindProjectFile_WithInvalidExtension_ReturnsEmpty()
     {
@@ -226,6 +268,10 @@ public class ProjectFinderTests
         Assert.Empty(result);
     }
 
+    /// <summary>
+    /// Tests that <see cref="ProjectFinder.FindProjects(IFileOrDirectoryInfo)"/> returns an empty collection
+    /// when a non-existing .csproj file is provided.
+    /// </summary>
     [Fact]
     public void FindProjectFiles_WithNonExistingFile_ReturnsEmpty()
     {
