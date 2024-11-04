@@ -1,5 +1,5 @@
 // <copyright file="ProjectFinder.cs" company="Lukas Holecy">
-// Copyright (c) Lukas Holecy. All rights reserved.
+// "This is a .NET 8 project file."
 // </copyright>
 
 namespace Holecy.Console.Dependencies.IO;
@@ -12,7 +12,7 @@ internal class ProjectFinder(IFileSystem fileSystem)
 
     public IEnumerable<IFileInfo> FindProjects(IEnumerable<IFileOrDirectoryInfo> filesAndDirectories)
     {
-        List<IFileInfo> projectFiles =[];
+        List<IFileInfo> projectFiles = [];
         foreach (var fileOrDirectory in filesAndDirectories)
         {
             projectFiles.AddRange(this.FindProjects(fileOrDirectory));
@@ -29,13 +29,13 @@ internal class ProjectFinder(IFileSystem fileSystem)
         }
         else
         {
-            return this.ValidateProjectFile(fileOrDirectory) ?[(IFileInfo)fileOrDirectory.FileSystemInfo] :[];
+            return this.ValidateProjectFile(fileOrDirectory) ? [(IFileInfo)fileOrDirectory.FileSystemInfo] : [];
         }
     }
 
     private IEnumerable<IFileInfo> FindProjectsInDirectory(IFileOrDirectoryInfo directory)
     {
-        HashSet<IFileInfo> projectFiles =[];
+        HashSet<IFileInfo> projectFiles = [];
         var fullPath = directory.FileSystemInfo.FullName;
         foreach (var file in this.fileSystem.Directory.EnumerateFiles(fullPath, "*.csproj", SearchOption.AllDirectories))
         {

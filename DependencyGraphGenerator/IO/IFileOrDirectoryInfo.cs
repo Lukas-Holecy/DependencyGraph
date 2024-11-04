@@ -1,5 +1,5 @@
 // <copyright file="IFileOrDirectoryInfo.cs" company="Lukas Holecy">
-// Copyright (c) Lukas Holecy. All rights reserved.
+// "This is a .NET 8 project file."
 // </copyright>
 
 namespace Holecy.Console.Dependencies.IO;
