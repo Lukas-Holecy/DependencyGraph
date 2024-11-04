@@ -12,6 +12,7 @@ using CliFx.Attributes;
 using CliFx.Exceptions;
 using CliFx.Infrastructure;
 using Holecy.Console.Dependencies.IO;
+using Holecy.Console.Dependencies.ProjectFiles;
 
 /// <summary>
 /// Represents the main command responsible for processing specified file or directory paths and creating
@@ -55,51 +56,16 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     /// <inheritdoc/>
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        if (this.Paths == null || this.Paths.Count == 0)
-        {
-            throw new CommandException("At least one path must be specified.");
-        }
+        var projects = new ProjectFinder(this.fileSystem).FindProjects(this.Paths);
+        var projectInformations = this.ExtractAllProjectsInformation(projects);
 
-        await console.Output.WriteLineAsync($"Processing {this.Paths.Count} paths");
+        await console.Output.WriteLineAsync($"Information about individial projects:");
+        var projectInformationsStrings = string.Join(Environment.NewLine, projectInformations.Select(p => p.ToString()))
+        await console.Output.WriteLineAsync(projectInformationsStrings ?? string.Empty);
+    }
 
-        // // Handle logging
-        // if (EnableLogging)
-        // {
-        //     var logFilePath = LogPath ?? "default.log";
-        //     await console.Output.WriteLineAsync($"Logging enabled. Log file: {logFilePath}");
-        //     // Initialize logging to the specified log file
-        //     // For example, set up a logger here
-        // }
-
-        // // Process each path
-        // foreach (var path in Paths)
-        // {
-        //     if (File.Exists(path))
-        //     {
-        //         await console.Output.WriteLineAsync($"Processing file: {path}");
-        //         // Add your file processing logic here
-        //     }
-        //     else if (Directory.Exists(path))
-        //     {
-        //         await console.Output.WriteLineAsync($"Processing directory: {path}");
-        //         // Add your directory processing logic here
-        //     }
-        //     else
-        //     {
-        //         await console.Error.WriteLineAsync($"Path not found: {path}");
-        //     }
-        // }
-
-        // // Handle output
-        // if (!string.IsNullOrWhiteSpace(OutputPath))
-        // {
-        //     await console.Output.WriteLineAsync($"Output will be saved to: {OutputPath}");
-        //     // Save output to the specified file
-        // }
-        // else
-        // {
-        //     await console.Output.WriteLineAsync("No output file specified.");
-        //     // Handle default output behavior, if any
-        // }
+    private HashSet<IProjectInformation> ExtractAllProjectsInformation(IEnumerable<IFileInfo> projects)
+    {
+        throw new NotImplementedException();
     }
 }
