@@ -1,4 +1,4 @@
-namespace Holecy.Console.Dependencies;
+namespace Holecy.Console.Dependencies.IO;
 
 using System.IO.Abstractions;
 

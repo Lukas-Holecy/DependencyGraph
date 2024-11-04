@@ -1,4 +1,6 @@
-﻿using Holecy.Console.Dependencies;
+﻿namespace Holecy.Console.Dependencies.Tests.IO;
+
+using Holecy.Console.Dependencies.IO;
 using Moq;
 using System.IO.Abstractions;
 using Xunit;
