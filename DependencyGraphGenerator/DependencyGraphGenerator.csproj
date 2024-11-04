@@ -33,4 +33,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\..\stylecop.json">
+        <Link>stylecop.json</Link>
+    </AdditionalFiles>
+  </ItemGroup>
+
 </Project>

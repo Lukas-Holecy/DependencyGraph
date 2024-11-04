@@ -1,17 +1,28 @@
-﻿namespace Holecy.Console.Dependencies.Tests.IO;
+﻿// <copyright file="FileOrDirectoryTests.cs" company="Lukas Holecy">
+// Copyright (c) Lukas Holecy. All rights reserved.
+// </copyright>
 
+namespace Holecy.Console.Dependencies.Tests.IO;
+
+using System.IO.Abstractions;
 using Holecy.Console.Dependencies.IO;
 using Moq;
-using System.IO.Abstractions;
 using Xunit;
 
+/// <summary>
+/// Contains unit tests for the <see cref="FileOrDirectoryInfo"/> class, verifying its behavior
+/// when initialized with file and directory paths, as well as handling invalid paths.
+/// </summary>
 public class FileOrDirectoryInfoTests
 {
+    /// <summary>
+    /// Tests that the constructor initializes as a file when the provided path points to an existing file.
+    /// </summary>
     [Fact]
     public void Constructor_ShouldInitializeAsFile_WhenPathIsFile()
     {
         // Arrange
-        var path = "test.txt";
+        const string path = "test.txt";
         var mockFileSystem = new Mock<IFileSystem>();
         var mockFileInfo = new Mock<IFileInfo>();
         mockFileSystem.Setup(fs => fs.File.Exists(path)).Returns(true);
@@ -25,6 +36,9 @@ public class FileOrDirectoryInfoTests
         Assert.False(fileOrDirectoryInfo.IsDirectory);
     }
 
+    /// <summary>
+    /// Tests that the constructor initializes as a directory when the provided path points to an existing directory.
+    /// </summary>
     [Fact]
     public void Constructor_ShouldInitializeAsDirectory_WhenPathIsDirectory()
     {
@@ -44,6 +58,9 @@ public class FileOrDirectoryInfoTests
         Assert.True(fileOrDirectoryInfo.IsDirectory);
     }
 
+    /// <summary>
+    /// Tests that the constructor throws an <see cref="ArgumentException"/> when the provided path is invalid (null, empty, whitespace, or nonexistent).
+    /// </summary>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
