@@ -1,5 +1,5 @@
 // <copyright file="Program.cs" company="Lukas Holecy">
-// "This is a .NET 8 project file."
+// Copyright (c) Lukas Holecy. All rights reserved.
 // </copyright>
 
 namespace Holecy.Console.Dependencies;

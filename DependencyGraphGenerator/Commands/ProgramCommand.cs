@@ -1,5 +1,5 @@
 // <copyright file="ProgramCommand.cs" company="Lukas Holecy">
-// "This is a .NET 8 project file."
+// Copyright (c) Lukas Holecy. All rights reserved.
 // </copyright>
 
 namespace Holecy.Console.Dependencies.Commands;
@@ -13,15 +13,17 @@ using CliFx.Exceptions;
 using CliFx.Infrastructure;
 using Holecy.Console.Dependencies.IO;
 
+/// <summary>
+/// Represents the main command responsible for processing specified file or directory paths and creating
+/// dependency graph.
+/// </summary>
 [Command]
-internal class ProgramCommand : ICommand
+internal class ProgramCommand(IFileSystem fileSystem) : ICommand
 {
-    private readonly IFileSystem fileSystem;
-
-    public ProgramCommand(IFileSystem fileSystem)
-    {
-        this.fileSystem = fileSystem;
-    }
+    /// <summary>
+    /// The file system abstraction used for file and directory operations.
+    /// </summary>
+    private readonly IFileSystem fileSystem = fileSystem;
 
     /// <summary>
     /// Gets positional parameter for paths (files or directories).
@@ -29,13 +31,24 @@ internal class ProgramCommand : ICommand
     [CommandParameter(0, Name = "paths", Description = "Paths to directories or files to process.", IsRequired = true)]
     public IReadOnlyList<IFileOrDirectoryInfo> Paths { get; init; } = [];
 
+    /// <summary>
+    /// Gets a value indicating whether logging is enabled.
+    /// </summary>
     [CommandOption("log", 'l', Description = "Enables logging.")]
     public bool EnableLogging { get; init; }
 
+    /// <summary>
+    /// Gets the path to the log file.
+    /// </summary>
     [CommandOption("log-path", Description = "Path to the log file.")]
     public string LogPath { get; init; } = string.Empty;
 
-    // -o or --output option to specify the output file
+    /// <summary>
+    /// Gets the path to the output file.
+    /// </summary>
+    /// <remarks>
+    /// This option can be specified using -o or --output.
+    /// </remarks>
     [CommandOption("output", 'o', Description = "Path to the output file.")]
     public string OutputPath { get; init; } = string.Empty;
 
