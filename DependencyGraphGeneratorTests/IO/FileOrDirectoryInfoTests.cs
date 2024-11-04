@@ -1,4 +1,4 @@
-﻿// <copyright file="FileOrDirectoryTests.cs" company="Lukas Holecy">
+// <copyright file="FileOrDirectoryInfoTests.cs" company="Lukas Holecy">
 // Copyright (c) Lukas Holecy. All rights reserved.
 // </copyright>
 
@@ -59,8 +59,10 @@ public class FileOrDirectoryInfoTests
     }
 
     /// <summary>
-    /// Tests that the constructor throws an <see cref="ArgumentException"/> when the provided path is invalid (null, empty, whitespace, or nonexistent).
+    /// Tests that the constructor throws an <see cref="ArgumentException"/> when the provided path is invalid
+    /// (null, empty, whitespace, or nonexistent).
     /// </summary>
+    /// <param name="path">The path to test.</param>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
