@@ -1,5 +1,5 @@
 // <copyright file="ListProjectsCommand.cs" company="Lukas Holecy">
-// Copyright (c) Lukas Holecy. All rights reserved.
+// "This is a .NET 8 project file."
 // </copyright>
 
 namespace Holecy.Console.Dependencies.Commands;
@@ -9,12 +9,16 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CliFx;
 using CliFx.Attributes;
-using CliFx.Exceptions;
 using CliFx.Infrastructure;
 using Holecy.Console.Dependencies.IO;
 
+/// <summary>
+/// Command for listing all projects in the specified directories.
+/// </summary>
+/// <param name="fileSystem">File system to use. Useful for testing.</param>
 [Command("list-projects", Description = "Lists all projects in the specified directories.")]
-internal class ListProjectsCommand(IFileSystem fileSystem): ICommand
+internal class ListProjectsCommand(IFileSystem fileSystem)
+: ICommand
 {
     private readonly IFileSystem fileSystem = fileSystem;
 
@@ -22,11 +26,17 @@ internal class ListProjectsCommand(IFileSystem fileSystem): ICommand
     /// Gets positional parameter for paths (files or directories).
     /// </summary>
     [CommandParameter(0, Name = "paths", Description = "Paths to directories or files to process.", IsRequired = true)]
-    public IReadOnlyList<IFileOrDirectoryInfo> Paths { get; init; } =[];
+    public IReadOnlyList<IFileOrDirectoryInfo> Paths { get; init; } = [];
 
+    /// <summary>
+    /// Gets a value indicating whether logging is enabled.
+    /// </summary>
     [CommandOption("log", 'l', Description = "Enables logging.")]
     public bool EnableLogging { get; init; }
 
+    /// <summary>
+    /// Gets the path to the log file.
+    /// </summary>
     [CommandOption("log-path", Description = "Path to the log file.")]
     public string LogPath { get; init; } = string.Empty;
 

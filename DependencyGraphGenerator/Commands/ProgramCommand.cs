@@ -1,5 +1,5 @@
 // <copyright file="ProgramCommand.cs" company="Lukas Holecy">
-// Copyright (c) Lukas Holecy. All rights reserved.
+// "This is a .NET 8 project file."
 // </copyright>
 
 namespace Holecy.Console.Dependencies.Commands;
@@ -27,7 +27,7 @@ internal class ProgramCommand : ICommand
     /// Gets positional parameter for paths (files or directories).
     /// </summary>
     [CommandParameter(0, Name = "paths", Description = "Paths to directories or files to process.", IsRequired = true)]
-    public IReadOnlyList<IFileOrDirectoryInfo> Paths { get; init; } =[];
+    public IReadOnlyList<IFileOrDirectoryInfo> Paths { get; init; } = [];
 
     [CommandOption("log", 'l', Description = "Enables logging.")]
     public bool EnableLogging { get; init; }
