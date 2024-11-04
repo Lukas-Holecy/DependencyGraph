@@ -1,4 +1,4 @@
-namespace Holecy.Console.Dependencies.CommandLine;
+namespace Holecy.Console.Dependencies.Commands;
 
 using CliFx;
 using CliFx.Attributes;
