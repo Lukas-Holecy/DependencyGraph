@@ -2,7 +2,6 @@ namespace Holecy.Console.Dependencies.Tests.IO;
 
 using System.Collections.Generic;
 using System.IO.Abstractions;
-using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using Holecy.Console.Dependencies.IO;
 using Moq;
