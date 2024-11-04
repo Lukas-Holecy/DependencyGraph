@@ -11,7 +11,7 @@ using System.Text;
 /// <summary>
 /// Information about a .net project.
 /// </summary>
-internal record class ProjectInformation
+internal record class ProjectInformation : IProjectInformation
 {
     /// <summary>
     /// Gets the name of the project.
@@ -46,9 +46,9 @@ internal record class ProjectInformation
         sb.AppendLine($"Path: {this.Path}");
         sb.AppendLine($"PackageId: {this.PackageId}");
         sb.AppendLine("References:");
-        foreach (var reference in this.References)
+        foreach (var reference in this.References.Select(r => r is not null))
         {
-            sb.AppendLine($"{reference.ToString() ?? string.Empty}");
+            sb.AppendLine($"{reference.ToString()}");
         }
 
         return sb.ToString();
