@@ -1,4 +1,4 @@
-namespace Holecy.Console.Dependencies.CommandLine;
+namespace Holecy.Console.Dependencies.Commands;
 
 using CliFx;
 using CliFx.Attributes;
@@ -36,7 +36,6 @@ internal class ProgramCommand : ICommand
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        // Validate paths
         if (Paths == null || Paths.Count == 0)
         {
             throw new CommandException("At least one path must be specified.");
