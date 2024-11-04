@@ -26,7 +26,7 @@ internal class ListProjectsCommand(IFileSystem fileSystem)
     /// Gets positional parameter for paths (files or directories).
     /// </summary>
     [CommandParameter(0, Name = "paths", Description = "Paths to directories or files to process.", IsRequired = true)]
-    public IReadOnlyList<IFileOrDirectoryInfo> Paths { get; init; } = [];
+    public IReadOnlyList<FileOrDirectoryInfo> Paths { get; init; } = [];
 
     /// <summary>
     /// Gets a value indicating whether logging is enabled.

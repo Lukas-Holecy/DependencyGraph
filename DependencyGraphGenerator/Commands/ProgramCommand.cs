@@ -30,7 +30,7 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     /// Gets positional parameter for paths (files or directories).
     /// </summary>
     [CommandParameter(0, Name = "paths", Description = "Paths to directories or files to process.", IsRequired = true)]
-    public IReadOnlyList<IFileOrDirectoryInfo> Paths { get; init; } = [];
+    public IReadOnlyList<FileOrDirectoryInfo> Paths { get; init; } = [];
 
     /// <summary>
     /// Gets a value indicating whether logging is enabled.
@@ -57,15 +57,25 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     public async ValueTask ExecuteAsync(IConsole console)
     {
         var projects = new ProjectFinder(this.fileSystem).FindProjects(this.Paths);
-        var projectInformations = this.ExtractAllProjectsInformation(projects);
+        var projectInformation = this.ExtractAllProjectsInformation(projects);
 
-        await console.Output.WriteLineAsync($"Information about individial projects:");
-        var projectInformationsStrings = string.Join(Environment.NewLine, projectInformations.Select(p => p.ToString()))
-        await console.Output.WriteLineAsync(projectInformationsStrings ?? string.Empty);
+        await console.Output.WriteLineAsync($"Information about individual projects:");
+        var projectInformationStrings = string.Join(Environment.NewLine, projectInformation.Select(p => p.ToString()));
+        await console.Output.WriteLineAsync(projectInformationStrings ?? string.Empty);
     }
 
     private HashSet<IProjectInformation> ExtractAllProjectsInformation(IEnumerable<IFileInfo> projects)
     {
-        throw new NotImplementedException();
+        var projectInfoExtractor = new ProjectInfoExtractor(this.fileSystem);
+        var allProjectsInformation = new HashSet<IProjectInformation>();
+        foreach (var project in projects)
+        {
+            if (projectInfoExtractor.TryExtractProjectInformation(project, out var projectInformation))
+            {
+                allProjectsInformation.Add(projectInformation!);
+            }
+        }
+
+        return allProjectsInformation;
     }
 }

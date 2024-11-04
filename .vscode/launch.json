@@ -5,6 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Main Arguments",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
+            "args": ["${workspaceFolder}\\..\\..\\"],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console":  "internalConsole"
+        },
+        {
             "name": "No Arguments",
             "type": "coreclr",
             "request": "launch",
