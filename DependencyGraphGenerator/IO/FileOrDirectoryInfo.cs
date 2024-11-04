@@ -1,3 +1,7 @@
+// <copyright file="FileOrDirectoryInfo.cs" company="Lukas Holecy">
+// Copyright (c) Lukas Holecy. All rights reserved.
+// </copyright>
+
 namespace Holecy.Console.Dependencies.IO;
 
 using System.IO.Abstractions;
@@ -17,14 +21,14 @@ internal class FileOrDirectoryInfo
     {
         if (fileSystem.File.Exists(path))
         {
-            FileSystemInfo = fileSystem.FileInfo.New(path);
+            this.FileSystemInfo = fileSystem.FileInfo.New(path);
             return;
         }
 
         if (fileSystem.Directory.Exists(path))
         {
-            FileSystemInfo = fileSystem.DirectoryInfo.New(path);
-            IsDirectory = true;
+            this.FileSystemInfo = fileSystem.DirectoryInfo.New(path);
+            this.IsDirectory = true;
             return;
         }
 

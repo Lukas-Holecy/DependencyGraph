@@ -1,13 +1,17 @@
+// <copyright file="ProgramCommand.cs" company="Lukas Holecy">
+// Copyright (c) Lukas Holecy. All rights reserved.
+// </copyright>
+
 namespace Holecy.Console.Dependencies.Commands;
 
+using System.Collections.Generic;
+using System.IO.Abstractions;
+using System.Threading.Tasks;
 using CliFx;
 using CliFx.Attributes;
 using CliFx.Exceptions;
 using CliFx.Infrastructure;
 using Holecy.Console.Dependencies.IO;
-using System.Collections.Generic;
-using System.IO.Abstractions;
-using System.Threading.Tasks;
 
 [Command]
 internal class ProgramCommand : ICommand
@@ -20,10 +24,10 @@ internal class ProgramCommand : ICommand
     }
 
     /// <summary>
-    /// Positional parameter for paths (files or directories).
+    /// Gets positional parameter for paths (files or directories).
     /// </summary>
     [CommandParameter(0, Name = "paths", Description = "Paths to directories or files to process.", IsRequired = true)]
-    public IReadOnlyList<IFileOrDirectoryInfo> Paths { get; init; } = [];
+    public IReadOnlyList<IFileOrDirectoryInfo> Paths { get; init; } =[];
 
     [CommandOption("log", 'l', Description = "Enables logging.")]
     public bool EnableLogging { get; init; }
@@ -35,14 +39,15 @@ internal class ProgramCommand : ICommand
     [CommandOption("output", 'o', Description = "Path to the output file.")]
     public string OutputPath { get; init; } = string.Empty;
 
+    /// <inheritdoc/>
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        if (Paths == null || Paths.Count == 0)
+        if (this.Paths == null || this.Paths.Count == 0)
         {
             throw new CommandException("At least one path must be specified.");
         }
 
-        await console.Output.WriteLineAsync($"Processing {Paths.Count} paths");
+        await console.Output.WriteLineAsync($"Processing {this.Paths.Count} paths");
 
         // // Handle logging
         // if (EnableLogging)

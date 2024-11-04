@@ -1,3 +1,7 @@
+// <copyright file="ProjectFinder.cs" company="Lukas Holecy">
+// Copyright (c) Lukas Holecy. All rights reserved.
+// </copyright>
+
 namespace Holecy.Console.Dependencies.IO;
 
 using System.IO.Abstractions;
@@ -8,10 +12,10 @@ internal class ProjectFinder(IFileSystem fileSystem)
 
     public IEnumerable<IFileInfo> FindProjects(IEnumerable<IFileOrDirectoryInfo> filesAndDirectories)
     {
-        List<IFileInfo> projectFiles = [];
+        List<IFileInfo> projectFiles =[];
         foreach (var fileOrDirectory in filesAndDirectories)
         {
-            projectFiles.AddRange(FindProjects(fileOrDirectory));
+            projectFiles.AddRange(this.FindProjects(fileOrDirectory));
         }
 
         return projectFiles;
@@ -21,21 +25,21 @@ internal class ProjectFinder(IFileSystem fileSystem)
     {
         if (fileOrDirectory.IsDirectory)
         {
-            return FindProjectsInDirectory(fileOrDirectory);
+            return this.FindProjectsInDirectory(fileOrDirectory);
         }
         else
         {
-            return  ValidateProjectFile(fileOrDirectory) ? [(IFileInfo)fileOrDirectory.FileSystemInfo] : [];
+            return this.ValidateProjectFile(fileOrDirectory) ?[(IFileInfo)fileOrDirectory.FileSystemInfo] :[];
         }
     }
 
     private IEnumerable<IFileInfo> FindProjectsInDirectory(IFileOrDirectoryInfo directory)
     {
-        HashSet<IFileInfo> projectFiles = [];
+        HashSet<IFileInfo> projectFiles =[];
         var fullPath = directory.FileSystemInfo.FullName;
-        foreach (var file in fileSystem.Directory.EnumerateFiles(fullPath, "*.csproj", SearchOption.AllDirectories))
+        foreach (var file in this.fileSystem.Directory.EnumerateFiles(fullPath, "*.csproj", SearchOption.AllDirectories))
         {
-            projectFiles.Add(fileSystem.FileInfo.New(file));
+            projectFiles.Add(this.fileSystem.FileInfo.New(file));
         }
 
         return projectFiles;
@@ -43,7 +47,7 @@ internal class ProjectFinder(IFileSystem fileSystem)
 
     private bool ValidateProjectFile(IFileOrDirectoryInfo fileOrDirectory)
     {
-        return fileSystem.File.Exists(fileOrDirectory.FileSystemInfo.FullName) &&
+        return this.fileSystem.File.Exists(fileOrDirectory.FileSystemInfo.FullName) &&
             fileOrDirectory.FileSystemInfo.Extension == ".csproj";
     }
 }

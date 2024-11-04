@@ -1,14 +1,17 @@
-﻿namespace Holecy.Console.Dependencies;
+// <copyright file="Program.cs" company="Lukas Holecy">
+// Copyright (c) Lukas Holecy. All rights reserved.
+// </copyright>
+
+namespace Holecy.Console.Dependencies;
 
 using System.IO.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 using CliFx;
-
+using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// Entry point of the application.
 /// </summary>
-public class Program
+public static class Program
 {
     public static async Task<int> Main(string[] args)
     {
@@ -28,7 +31,6 @@ public class Program
                     .AddSingleton<IFileSystem, FileSystem>()
                     .AddTransient<Commands.ProgramCommand>()
                     .AddTransient<Commands.ListProjectsCommand>();
-
 
         var serviceProvider = services.BuildServiceProvider();
         return serviceProvider;
