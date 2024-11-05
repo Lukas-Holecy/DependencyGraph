@@ -57,20 +57,19 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     public async ValueTask ExecuteAsync(IConsole console)
     {
         var projects = new ProjectFinder(this.fileSystem).FindProjects(this.Paths);
-        var projectInformation = this.ExtractAllProjectsInformation(projects);
+        var projectInformation = ExtractAllProjectsInformation(projects);
 
         await console.Output.WriteLineAsync($"Information about individual projects:");
         var projectInformationStrings = string.Join(Environment.NewLine, projectInformation.Select(p => p.ToString()));
         await console.Output.WriteLineAsync(projectInformationStrings ?? string.Empty);
     }
 
-    private HashSet<IProjectInformation> ExtractAllProjectsInformation(IEnumerable<IFileInfo> projects)
+    private static HashSet<IProjectInformation> ExtractAllProjectsInformation(IEnumerable<IFileInfo> projects)
     {
-        var projectInfoExtractor = new ProjectInfoExtractor(this.fileSystem);
         var allProjectsInformation = new HashSet<IProjectInformation>();
         foreach (var project in projects)
         {
-            if (projectInfoExtractor.TryExtractProjectInformation(project, out var projectInformation))
+            if (ProjectInfoExtractor.TryExtractProjectInformation(project, out var projectInformation))
             {
                 allProjectsInformation.Add(projectInformation!);
             }

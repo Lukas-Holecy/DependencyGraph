@@ -46,4 +46,8 @@
     </AdditionalFiles>
   </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ProjectFiles\" />
+    </ItemGroup>
+
 </Project>
