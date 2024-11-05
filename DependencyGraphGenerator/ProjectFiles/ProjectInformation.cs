@@ -42,9 +42,9 @@ internal record class ProjectInformation : IProjectInformation
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.AppendLine($"Name: {this.Name}");
+        sb.AppendLine($"Name: {this.Name ?? "No_Name_Found"}");
         sb.AppendLine($"Path: {this.Path}");
-        sb.AppendLine($"PackageId: {this.PackageId}");
+        sb.AppendLine($"PackageId: {this.PackageId ?? "No_PackageId_Found"}");
         sb.AppendLine("References:");
         foreach (var reference in this.References.Select(r => r is not null))
         {

@@ -13,6 +13,7 @@ internal class ProjectInfoExtractor(IFileSystem fileSystem)
     private IFileSystem fileSystem = fileSystem;
 
     /// <summary>
+    /// Initializes static members of the <see cref="ProjectInfoExtractor"/> class.
     /// Stastic constructor that registers MSBuild.
     /// </summary>
     static ProjectInfoExtractor()
