@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Main Arguments",
             "type": "coreclr",
@@ -11,6 +12,17 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
             "args": ["${workspaceFolder}\\..\\..\\"],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console":  "internalConsole"
+        },
+        {
+            "name": "OfficeUtilitiesOnly",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
+            "args": ["${workspaceFolder}\\..\\..\\repos\\OfficeUtilities"],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console":  "internalConsole"
