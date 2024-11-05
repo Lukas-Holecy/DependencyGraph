@@ -22,6 +22,8 @@ internal class ListProjectsCommand(IFileSystem fileSystem)
 {
     private readonly IFileSystem fileSystem = fileSystem;
 
+    // TODO - I should use IFileOrDirectoryInfo instead of FileOrDirectoryInfo, but there is a problem with DI.
+
     /// <summary>
     /// Gets positional parameter for paths (files or directories).
     /// </summary>
