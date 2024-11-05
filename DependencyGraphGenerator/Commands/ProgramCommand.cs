@@ -11,6 +11,7 @@ using CliFx;
 using CliFx.Attributes;
 using CliFx.Exceptions;
 using CliFx.Infrastructure;
+using Holecy.Console.Dependencies.Graph;
 using Holecy.Console.Dependencies.IO;
 using Holecy.Console.Dependencies.ProjectFiles;
 
@@ -58,10 +59,15 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     {
         var projects = new ProjectFinder(this.fileSystem).FindProjects(this.Paths);
         var projectInformation = ExtractAllProjectsInformation(projects);
+        var nodes = NodeFactory.GenerateNodes(projectInformation);
 
         await console.Output.WriteLineAsync($"Information about individual projects:");
         var projectInformationStrings = string.Join(Environment.NewLine, projectInformation.Select(p => p.ToString()));
         await console.Output.WriteLineAsync(projectInformationStrings ?? string.Empty);
+
+        var nodesStrings = string.Join(Environment.NewLine, nodes.Select(n => n.ToString()));
+        await console.Output.WriteLineAsync($"Nodes in the graph:");
+        await console.Output.WriteLineAsync(nodesStrings ?? string.Empty);
     }
 
     private static HashSet<IProjectInformation> ExtractAllProjectsInformation(IEnumerable<IFileInfo> projects)

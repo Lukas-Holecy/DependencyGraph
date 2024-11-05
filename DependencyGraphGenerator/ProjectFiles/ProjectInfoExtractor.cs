@@ -112,16 +112,16 @@ internal static class ProjectInfoExtractor
             Name = project.GetPropertyValue("AssemblyName"),
             Path = projectFile.FullName,
             PackageId = project.GetPropertyValue("PackageId"),
-            References = ExtractReferences(project),
+            References = ExtractReferences(project, projectFile.FullName, fileSystem),
         };
 
         return projectInformation;
     }
 
-    private static HashSet<IReference> ExtractReferences(Project project)
+    private static HashSet<IReference> ExtractReferences(Project project, string projectPath, IFileSystem fileSystem)
     {
         HashSet<IReference> references = ExtractPackageReferences(project);
-        references.UnionWith(ExtractProjectReferences(project));
+        references.UnionWith(ExtractProjectReferences(project, projectPath, fileSystem));
         references.UnionWith(ExtractAssemblyReferences(project));
 
         return references;
@@ -140,14 +140,22 @@ internal static class ProjectInfoExtractor
         return references;
     }
 
-    private static HashSet<IReference> ExtractProjectReferences(Project project)
+    private static HashSet<IReference> ExtractProjectReferences(
+        Project project, string projectPath, IFileSystem fileSystem)
     {
         var references = new HashSet<IReference>();
 
         foreach (var item in project.GetItems("ProjectReference"))
         {
-            string projectPath = item.EvaluatedInclude;
-            references.Add(new ProjectReference { Name = projectPath });
+            var referencePath = item.EvaluatedInclude;
+            if (!fileSystem.Path.IsPathFullyQualified(referencePath))
+            {
+                var projectDir = fileSystem.Path.GetDirectoryName(projectPath);
+                referencePath = fileSystem.Path.Combine(projectDir, referencePath);
+                referencePath = fileSystem.Path.GetFullPath(referencePath);
+            }
+
+            references.Add(new ProjectReference { Name = referencePath });
         }
 
         return references;
