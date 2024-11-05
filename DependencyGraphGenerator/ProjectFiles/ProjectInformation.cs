@@ -46,7 +46,7 @@ internal record class ProjectInformation : IProjectInformation
         sb.AppendLine($"Path: {this.Path}");
         sb.AppendLine($"PackageId: {this.PackageId ?? "No_PackageId_Found"}");
         sb.AppendLine("References:");
-        foreach (var reference in this.References.Select(r => r is not null))
+        foreach (IReference reference in this.References.Where(r => r != null))
         {
             sb.AppendLine($"{reference.ToString()}");
         }
