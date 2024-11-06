@@ -97,7 +97,7 @@ public class ProjectInfoExtractorTests
         Assert.Equal(projectPath, projectInfo.Path);
         Assert.NotEmpty(projectInfo.References);
         Assert.Contains(projectInfo.References, r => r is PackageReference && r.Name == "Newtonsoft.Json");
-        Assert.Contains(projectInfo.References, r => r is ProjectReference && r.Name == @"C:\Source\Projects\AnotherProject.csproj");
+        Assert.Contains(projectInfo.References, r => r is ProjectReference && r.Name == @"C:\Source\Projects\AnotherProject\AnotherProject.csproj");
         Assert.Contains(projectInfo.References, r => r is AssemblyReference && r.Name == "System.Xml");
     }
 

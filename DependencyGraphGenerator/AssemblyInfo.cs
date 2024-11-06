@@ -5,3 +5,4 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("DependencyGraphGeneratorTests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
