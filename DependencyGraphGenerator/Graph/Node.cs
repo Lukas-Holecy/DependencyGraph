@@ -22,22 +22,22 @@ internal class Node
     {
         ArgumentNullException.ThrowIfNull(projectInfo, nameof(projectInfo));
 
-        this.PackageId = projectInfo.PackageId;
-        this.Path = projectInfo.Path;
+        this.PackageId = projectInfo.PackageId ?? string.Empty;
+        this.Path = projectInfo.Path ?? string.Empty;
     }
 
     public Node(IReference reference)
     {
         var result = reference switch
         {
-            PackageReference packageReference => this.PackageId = packageReference.Name,
-            ProjectReference projectReference => this.Path = projectReference.Name,
-            AssemblyReference assemblyReference => this.Path = assemblyReference.Name,
+            PackageReference packageReference => this.PackageId = packageReference.Name ?? string.Empty,
+            ProjectReference projectReference => this.Path = projectReference.Name ?? string.Empty,
+            AssemblyReference assemblyReference => this.Path = assemblyReference.Name ?? string.Empty,
             _ => throw new ArgumentException("Unknown reference type.", nameof(reference)),
         };
     }
 
-    private Node(string packageId, string path)
+    public Node(string packageId, string path)
     {
         this.PackageId = packageId ?? string.Empty;
         this.Path = path ?? string.Empty;
@@ -66,9 +66,35 @@ internal class Node
     public string Path { get; init; } = string.Empty;
 
     /// <inheritdoc/>
-    public override bool Equals(object? obj)
+    public bool IsSameProject(object? obj)
     {
-        return obj is Node other && this.PackageId == other.PackageId && this.Path == other.Path;
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (obj is not Node other)
+        {
+            return false;
+        }
+
+        if (string.IsNullOrEmpty(this.PackageId) && string.IsNullOrEmpty(this.Path) &&
+             string.IsNullOrEmpty(other.PackageId) && string.IsNullOrEmpty(other.Path))
+        {
+            return true;
+        }
+
+        if (string.IsNullOrEmpty(this.PackageId) && string.IsNullOrEmpty(other.PackageId))
+        {
+            return this.Path == other.Path;
+        }
+
+        if (string.IsNullOrEmpty(this.Path) && string.IsNullOrEmpty(other.Path))
+        {
+            return this.PackageId == other.PackageId;
+        }
+
+        return this.PackageId == other.PackageId || this.Path == other.Path;
     }
 
     /// <inheritdoc/>
@@ -79,22 +105,13 @@ internal class Node
 
     public Node Combine(Node other)
     {
-        if (this.PackageId != other.PackageId)
+        if (!this.IsSameProject(other))
         {
             return this;
         }
 
         return new Node(
-            string.IsNullOrEmpty(this.PackageId) ? this.PackageId : other.PackageId,
-            string.IsNullOrEmpty(this.Path) ? this.Path : other.Path);
-    }
-
-    public override int GetHashCode()
-    {
-        // If PackageId is not empty, use its hash code.
-        // If PackageId is empty, use Path's hash code.
-        // If both are empty, return a default hash code (0).
-        return !string.IsNullOrEmpty(this.PackageId) ? this.PackageId.GetHashCode() :
-            !string.IsNullOrEmpty(this.Path) ? this.Path.GetHashCode() : 0;
+            string.IsNullOrEmpty(this.PackageId) ? other.PackageId : this.PackageId,
+            string.IsNullOrEmpty(this.Path) ? other.Path : this.Path);
     }
 }

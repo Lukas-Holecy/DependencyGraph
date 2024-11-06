@@ -42,13 +42,6 @@ internal static class NodeFactory
         }
     }
 
-    private static void ReplaceExistingNodeWithCombination(HashSet<Node> nodes, Node node)
-    {
-        var oldNode = nodes.First(n => n.Equals(node));
-        nodes.Remove(oldNode);
-        nodes.Add(oldNode.Combine(node));
-    }
-
     private static HashSet<Node> GetLocalProjectNodes(HashSet<IProjectInformation> projectsInformation)
     {
         var nodes = new HashSet<Node>();
@@ -65,9 +58,11 @@ internal static class NodeFactory
 
     private static void AddMethod(HashSet<Node> nodes, Node node)
     {
-        if (nodes.Contains(node))
+        var existingNode = nodes.FirstOrDefault(n => n.IsSameProject(node));
+        if (existingNode != null)
         {
-            ReplaceExistingNodeWithCombination(nodes, node);
+            nodes.Remove(existingNode);
+            nodes.Add(existingNode.Combine(node));
         }
         else
         {
