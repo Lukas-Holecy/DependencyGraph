@@ -71,7 +71,8 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
 
         if (!string.IsNullOrWhiteSpace(this.OutputPath))
         {
-            await new GraphWriter(this.fileSystem).WriteGraphToFile(graph, this.OutputPath);
+            var graphDot = new GraphDotGenerator(this.fileSystem).GenerateGraphDot(graph, this.OutputPath);
+            FileSaver.SaveStringToFile(graphDot, this.OutputPath, this.fileSystem);
             await console.Output.WriteLineAsync($"Graph was written to the file: {this.OutputPath}");
         }
     }
