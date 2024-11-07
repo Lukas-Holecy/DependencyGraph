@@ -59,15 +59,21 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     {
         var projects = new ProjectFinder(this.fileSystem).FindProjects(this.Paths);
         var projectInformation = ExtractAllProjectsInformation(projects);
-        var nodes = NodeFactory.GenerateNodes(projectInformation);
+        var graph = new GraphFactory().CreateGraph(projectInformation);
 
         await console.Output.WriteLineAsync($"Information about individual projects:");
         var projectInformationStrings = string.Join(Environment.NewLine, projectInformation.Select(p => p.ToString()));
         await console.Output.WriteLineAsync(projectInformationStrings ?? string.Empty);
 
-        var nodesStrings = string.Join(Environment.NewLine, nodes.Select(n => n.ToString()));
+        var nodesStrings = string.Join(Environment.NewLine, graph.Vertices.Select(n => n.ToString()));
         await console.Output.WriteLineAsync($"Nodes in the graph:");
         await console.Output.WriteLineAsync(nodesStrings ?? string.Empty);
+
+        if (!string.IsNullOrWhiteSpace(this.OutputPath))
+        {
+            await new GraphWriter(this.fileSystem).WriteGraphToFile(graph, this.OutputPath);
+            await console.Output.WriteLineAsync($"Graph was written to the file: {this.OutputPath}");
+        }
     }
 
     private static HashSet<IProjectInformation> ExtractAllProjectsInformation(IEnumerable<IFileInfo> projects)

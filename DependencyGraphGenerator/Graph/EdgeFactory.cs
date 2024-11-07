@@ -4,14 +4,40 @@
 
 namespace Holecy.Console.Dependencies.Graph;
 
-using QuikGraph;
+using System.Collections.Generic;
+using Holecy.Console.Dependencies.ProjectFiles;
 
-internal class EdgeFactory
+/// <summary>
+/// Factory for creating graph edges for Dependency Graph.
+/// </summary>
+internal static class EdgeFactory
 {
-    public Edge CreateEdge(Node source, Node target)
+    /// <summary>
+    /// Creates edges for the graph.
+    /// </summary>
+    /// <param name="nodes">All nodes generated from <paramref name="projectsInformation"/>.</param>
+    /// <param name="projectsInformation">Information about discovered projects.</param>
+    /// <returns>Collection of all graph edges between projects and their references.</returns>
+    /// <seealso cref="NodeFactory"/>
+    public static HashSet<Edge> CreateEdges(HashSet<Node> nodes, HashSet<IProjectInformation> projectsInformation)
     {
-        throw new System.NotImplementedException();
-       // return new Edge(source, target);
+        HashSet<Edge> edges = [];
+        foreach (var projectInformation in projectsInformation)
+        {
+            edges.UnionWith(GetProjectEdges(nodes, projectInformation));
+        }
+
+        return edges;
+    }
+
+    private static IEnumerable<Edge> GetProjectEdges(HashSet<Node> nodes, IProjectInformation projectInformation)
+    {
+        var projectNode = nodes.First(n => n.IsSameProject(new Node(projectInformation)));
+
+        foreach (var reference in projectInformation.References)
+        {
+            var referenceNode = nodes.First(n => n.IsSameProject(new Node(reference)));
+            yield return new Edge(projectNode, referenceNode);
+        }
     }
 }
-

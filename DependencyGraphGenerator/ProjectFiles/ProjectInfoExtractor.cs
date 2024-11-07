@@ -35,9 +35,16 @@ internal static class ProjectInfoExtractor
     /// <param name="projectFile">Project file to be interrogated.</param>
     /// <param name="projectInformation">Information extracted from the project file.</param>
     /// <param name="fileSystem">File system to be used for file operations.</param>
+    /// <param name="useStreams">
+    /// True if streams should be used for reading the project file, false otherwise.
+    /// This is needed for testing purposes.
+    /// </param>
     /// <returns>True if extraction was successful, false otherwise.</returns>
     internal static bool TryExtractProjectInformation(
-        IFileInfo projectFile, out ProjectInformation? projectInformation, IFileSystem fileSystem)
+        IFileInfo projectFile,
+        out ProjectInformation? projectInformation,
+        IFileSystem fileSystem,
+        bool useStreams = false)
     {
         ArgumentNullException.ThrowIfNull(projectFile, nameof(projectFile));
 
@@ -51,7 +58,7 @@ internal static class ProjectInfoExtractor
         try
         {
             // Read remarks to see why it's done like this.
-            projectInformation = ExtractProjectInformation(projectFile, fileSystem);
+            projectInformation = ExtractProjectInformation(projectFile, fileSystem, useStreams);
             return true;
         }
         catch (Exception ex)
@@ -67,12 +74,17 @@ internal static class ProjectInfoExtractor
     /// <param name="projectFile">Project file to be interrogated.</param>
     /// <param name="projectInformation">Information extracted from the project file.</param>
     /// <returns>True if extraction was successful, false otherwise.</returns>
+    /// <param name="useStreams">
+    /// True if streams should be used for reading the project file, false otherwise.
+    /// This is needed for testing purposes.
+    /// </param>
     /// <remarks>
     /// This method is needed, because if a method with Microsoft.Build method is called before the static constructor
     /// is called, it will fail.
     /// This is because the availability of used assemblies is done before the static constructor is called.
     /// </remarks>
-    internal static bool TryExtractProjectInformation(IFileInfo projectFile, out ProjectInformation? projectInformation)
+    internal static bool TryExtractProjectInformation(
+        IFileInfo projectFile, out ProjectInformation? projectInformation, bool useStreams = false)
     {
         return TryExtractProjectInformation(projectFile, out projectInformation, new FileSystem());
     }
@@ -93,35 +105,50 @@ internal static class ProjectInfoExtractor
     /// </summary>
     /// <param name="projectFile">Project file to be interrogated.</param>
     /// <returns>Information extracted from the project file.</returns>
+    /// <param name="useStreams">
+    /// True if streams should be used for reading the project file, false otherwise.
+    /// This is needed for testing purposes.
+    /// </param>
     /// <remarks>
     /// This method can't be public, because if it's called before the static constructor is called, it will fail.
     /// This is because the availability of used assemblies is done before the static constructor is called.
     /// </remarks>
-    private static ProjectInformation ExtractProjectInformation(IFileInfo projectFile, IFileSystem fileSystem)
+    private static ProjectInformation ExtractProjectInformation(
+        IFileInfo projectFile, IFileSystem fileSystem, bool useStreams)
     {
-        string xmlContent = fileSystem.File.ReadAllText(projectFile.FullName);
-        using StringReader stringReader = new StringReader(xmlContent);
-        using XmlReader xmlReader = XmlReader.Create(stringReader);
-
-        var projectRootElement = ProjectRootElement.Create(xmlReader);
-
-        // Not using Project(string) constructor, because it isn't testable.
-        Project project = new Project(projectRootElement);
+        var project = GetProject(projectFile, fileSystem, useStreams);
         var projectInformation = new ProjectInformation
         {
             Name = project.GetPropertyValue("AssemblyName"),
             Path = projectFile.FullName,
             PackageId = project.GetPropertyValue("PackageId"),
-            References = ExtractReferences(project, projectFile.FullName, fileSystem),
+            References = ExtractReferences(project, projectFile, fileSystem),
         };
 
         return projectInformation;
     }
 
-    private static HashSet<IReference> ExtractReferences(Project project, string projectPath, IFileSystem fileSystem)
+    private static Project GetProject(IFileInfo projectFile, IFileSystem fileSystem, bool useStreams)
+    {
+        if (useStreams)
+        {
+            string xmlContent = fileSystem.File.ReadAllText(projectFile.FullName);
+            using StringReader stringReader = new StringReader(xmlContent);
+            using XmlReader xmlReader = XmlReader.Create(stringReader);
+
+            var projectRootElement = ProjectRootElement.Create(xmlReader);
+
+            // Not using Project(string) constructor, because it isn't testable.
+            return new Project(projectRootElement);
+        }
+
+        return new Project(projectFile.FullName);
+    }
+
+    private static HashSet<IReference> ExtractReferences(Project project, IFileInfo projectFile, IFileSystem fileSystem)
     {
         HashSet<IReference> references = ExtractPackageReferences(project);
-        references.UnionWith(ExtractProjectReferences(project, projectPath, fileSystem));
+        references.UnionWith(ExtractProjectReferences(project, projectFile, fileSystem));
         references.UnionWith(ExtractAssemblyReferences(project));
 
         return references;
@@ -141,7 +168,7 @@ internal static class ProjectInfoExtractor
     }
 
     private static HashSet<IReference> ExtractProjectReferences(
-        Project project, string projectPath, IFileSystem fileSystem)
+        Project project, IFileInfo projectFile, IFileSystem fileSystem)
     {
         var references = new HashSet<IReference>();
 
@@ -150,7 +177,7 @@ internal static class ProjectInfoExtractor
             var referencePath = item.EvaluatedInclude;
             if (!fileSystem.Path.IsPathFullyQualified(referencePath))
             {
-                var projectDir = fileSystem.Path.GetDirectoryName(projectPath);
+                var projectDir = projectFile.DirectoryName ?? string.Empty;
                 referencePath = fileSystem.Path.Combine(projectDir, referencePath);
                 referencePath = fileSystem.Path.GetFullPath(referencePath);
             }

@@ -2,12 +2,10 @@
 // Copyright (c) Lukas Holecy. All rights reserved.
 // </copyright>
 
-// TODO create tests
 namespace Holecy.Console.Dependencies.Graph;
 
 using System;
 using Holecy.Console.Dependencies.ProjectFiles;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 /// <summary>
 /// Represents a node representing a project in a dependency graph.
@@ -26,6 +24,10 @@ internal class Node
         this.Path = projectInfo.Path ?? string.Empty;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Node"/> class.
+    /// </summary>
+    /// <param name="reference">Information about a reference in a project file.</param>
     public Node(IReference reference)
     {
         var result = reference switch
@@ -37,6 +39,11 @@ internal class Node
         };
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Node"/> class.
+    /// </summary>
+    /// <param name="packageId">The package identifier.</param>
+    /// <param name="path">The path associated with the node.</param>
     public Node(string packageId, string path)
     {
         this.PackageId = packageId ?? string.Empty;
@@ -65,19 +72,15 @@ internal class Node
     /// </remarks>
     public string Path { get; init; } = string.Empty;
 
-    /// <inheritdoc/>
-    public bool IsSameProject(object? obj)
+    /// <summary>
+    /// Determines whether the node represents the same project as the other node.
+    /// For example one project might reference a NuGet package, while the other might reference the project itself.
+    /// Both point to the same project.
+    /// </summary>
+    /// <param name="other">Another node object.</param>
+    /// <returns>True if either the path or package id is the same.</returns>
+    public bool IsSameProject(Node other)
     {
-        if (obj == null)
-        {
-            return false;
-        }
-
-        if (obj is not Node other)
-        {
-            return false;
-        }
-
         if (string.IsNullOrEmpty(this.PackageId) && string.IsNullOrEmpty(this.Path) &&
              string.IsNullOrEmpty(other.PackageId) && string.IsNullOrEmpty(other.Path))
         {
@@ -101,17 +104,5 @@ internal class Node
     public override string ToString()
     {
         return string.IsNullOrEmpty(this.PackageId) ? this.Path : $"{this.PackageId}, {this.Path}";
-    }
-
-    public Node Combine(Node other)
-    {
-        if (!this.IsSameProject(other))
-        {
-            return this;
-        }
-
-        return new Node(
-            string.IsNullOrEmpty(this.PackageId) ? other.PackageId : this.PackageId,
-            string.IsNullOrEmpty(this.Path) ? other.Path : this.Path);
     }
 }
