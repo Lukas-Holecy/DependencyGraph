@@ -6,31 +6,32 @@ namespace Holecy.Console.Dependencies.Graph;
 
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+using System.Linq;
 using Holecy.Console.Dependencies.ProjectFiles;
-using Microsoft.Build.Evaluation;
 
 /// <summary>
 /// Factory for creating nodes.
 /// </summary>
 internal static class NodeFactory
 {
-    public static HashSet<Node> GenerateNodes(HashSet<IProjectInformation> projectsInformation)
+    /// <summary>
+    /// Generates nodes from the provided projects information.
+    /// </summary>
+    /// <param name="projectsInformation">Collection of information about project files.</param>
+    /// <returns>Collection of nodes to be used in Dependency Graph.</returns>
+    public static HashSet<Node> CreateNodes(HashSet<IProjectInformation> projectsInformation)
     {
         var nodes = GetLocalProjectNodes(projectsInformation);
-        nodes = AddReferencesNodes(projectsInformation, nodes);
+        AddReferencesNodes(projectsInformation, nodes);
         return nodes;
     }
 
-    private static HashSet<Node> AddReferencesNodes(
-        HashSet<IProjectInformation> projectsInformation, HashSet<Node> nodes)
+    private static void AddReferencesNodes(HashSet<IProjectInformation> projectsInformation, HashSet<Node> nodes)
     {
         foreach (var project in projectsInformation)
         {
             AddProjectReferences(project, nodes);
         }
-
-        return nodes;
     }
 
     private static void AddProjectReferences(IProjectInformation project, HashSet<Node> nodes)
@@ -48,8 +49,6 @@ internal static class NodeFactory
         foreach (var projectInformation in projectsInformation)
         {
             var node = new Node(projectInformation);
-
-            // TODO this should be implemented better.
             AddMethod(nodes, node);
         }
 
@@ -58,15 +57,50 @@ internal static class NodeFactory
 
     private static void AddMethod(HashSet<Node> nodes, Node node)
     {
-        var existingNode = nodes.FirstOrDefault(n => n.IsSameProject(node));
-        if (existingNode != null)
+        var existingNodes = nodes.Where(n => n.IsSameProject(node));
+        if (existingNodes.Any())
+        {
+            ReplaceExistingNodesIfNecessary(nodes, node, existingNodes);
+            return;
+        }
+
+        nodes.Add(node);
+    }
+
+    /// <summary>
+    /// I only need to replace the existing nodes if the new node has both the packageId and path and
+    /// if the existing one is missing one of them.
+    /// </summary>
+    /// <param name="nodes">Collection of nodes.</param>
+    /// <param name="newNode">New node that can be added to the collection.</param>
+    /// <param name="existingNodes">Collection of nodes already existing in the collection.</param>
+    private static void ReplaceExistingNodesIfNecessary(
+        HashSet<Node> nodes, Node newNode, IEnumerable<Node> existingNodes)
+    {
+        if (existingNodes.Count() > 1)
+        {
+            KeepNodeWithBothIds(nodes, newNode, existingNodes);
+        }
+
+        ReplaceExistingNodeIfNecessary(nodes, newNode, existingNodes.First());
+    }
+
+    private static void KeepNodeWithBothIds(HashSet<Node> nodes, Node newNode, IEnumerable<Node> existingNodes)
+    {
+        throw new NotImplementedException();
+    }
+
+    private static void ReplaceExistingNodeIfNecessary(HashSet<Node> nodes, Node newNode, Node existingNode)
+    {
+        if (string.IsNullOrEmpty(newNode.PackageId) || string.IsNullOrEmpty(newNode.Path))
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(existingNode.PackageId) || string.IsNullOrEmpty(existingNode.Path))
         {
             nodes.Remove(existingNode);
-            nodes.Add(existingNode.Combine(node));
-        }
-        else
-        {
-            nodes.Add(node);
+            nodes.Add(newNode);
         }
     }
 }

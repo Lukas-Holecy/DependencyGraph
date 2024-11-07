@@ -43,6 +43,11 @@ public class NodeTests
         Assert.Equal(path ?? string.Empty, node.Path);
     }
 
+    /// <summary>
+    /// Tests that the constructor initializes correctly when provided with valid reference information.
+    /// </summary>
+    /// <param name="packageId">Package id (NuGet name).</param>
+    /// <param name="path">Path to the project file.</param>
     [Theory]
     [InlineData("", "")]
     [InlineData("testPackageId", "")]
@@ -61,6 +66,9 @@ public class NodeTests
         Assert.Equal(path ?? string.Empty, node.Path);
     }
 
+    /// <summary>
+    /// Tests that the constructor throws an exception when provided with a null parameter.
+    /// </summary>
     [Fact]
     public void Constructor_ThrowsException_WhenNullParameter()
     {
@@ -71,13 +79,20 @@ public class NodeTests
         Assert.Throws<ArgumentNullException>(() => new Node(projectInfo!));
     }
 
+    /// <summary>
+    /// Tests that the IsSameProject method returns true when one or both of the package IDs match.
+    /// </summary>
+    /// <param name="packageId1">Package Id of the first node.</param>
+    /// <param name="path1">Path of the first node.</param>
+    /// <param name="packageId2">Package Id of the second node.</param>
+    /// <param name="path2">Path of the second node.</param>
     [Theory]
     [InlineData("", "", "", "")]
     [InlineData(null, null, null, null)]
     [InlineData("testPackageId", "testPath", "testPackageId", "testPath")]
     [InlineData("testPackageId", "testPath", "testPackageId", "")]
     [InlineData("testPackageId", "testPath", "", "testPath")]
-    public void TryCompareTwoNodes_AreEqual_WhenOneIDMatches(
+    public void TryCompareTwoNodes_IsSameProject_WhenOneIDMatches(
         string? packageId1, string? path1, string? packageId2, string? path2)
     {
         // Arrange
@@ -91,6 +106,13 @@ public class NodeTests
         Assert.True(result);
     }
 
+    /// <summary>
+    /// Tests that the IsSameProject method returns false none of the node ids match.
+    /// </summary>
+    /// <param name="packageId1">Package Id of the first node.</param>
+    /// <param name="path1">Path of the first node.</param>
+    /// <param name="packageId2">Package Id of the second node.</param>
+    /// <param name="path2">Path of the second node.</param>
     [Theory]
     [InlineData("testPackageId1", "testPath1", "testPackageId2", "testPath2")]
     [InlineData("testPackageId1", "testPath1", "testPackageId2", "")]
@@ -116,7 +138,7 @@ public class NodeTests
     [InlineData("testPackageId1", null, null, "testPath2")]
     [InlineData("testPackageId1", null, null, null)]
     [InlineData(null, null, null, "testPath2")]
-    public void TryCompareTwoNodes_AreNotEqual_WhenBothIDsDontMatch(
+    public void TryCompareTwoNodes_AreNotEqual_WhenBothIDsNotMatch(
         string? packageId1, string? path1, string? packageId2, string? path2)
     {
         // Arrange
@@ -128,35 +150,5 @@ public class NodeTests
 
         // Assert
         Assert.False(result);
-    }
-
-    [Fact]
-    public void CombineTwoNodes_ReturnsNewNode_WhenPackageIDsMatch()
-    {
-        // Arrange
-        var node1 = new Node("testPackageId1", string.Empty);
-        var node2 = new Node("testPackageId1", "testPath2");
-
-        // Act
-        var result = node1.Combine(node2);
-
-        // Assert
-        Assert.Equal("testPackageId1", result.PackageId);
-        Assert.Equal("testPath2", result.Path);
-    }
-
-    [Fact]
-    public void CombineTwoNodes_ReturnsNewNode_WhenPathIsMatch()
-    {
-        // Arrange
-        var node1 = new Node("", "testPath2");
-        var node2 = new Node("testPackageId2", "testPath2");
-
-        // Act
-        var result = node1.Combine(node2);
-
-        // Assert
-        Assert.Equal("testPackageId2", result.PackageId);
-        Assert.Equal("testPath2", result.Path);
     }
 }
