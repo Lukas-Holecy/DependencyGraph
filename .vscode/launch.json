@@ -12,7 +12,36 @@
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
             "args": [
                     "${workspaceFolder}\\..\\..\\Repos\\OfficeUtilities", "${workspaceFolder}\\..\\..\\Repos\\WordTools", "${workspaceFolder}\\..\\..\\Repos\\iManageUtilities", "${workspaceFolder}\\..\\..\\Repos\\ExcelUtilities", "${workspaceFolder}\\..\\..\\Repos\\PowerPointUtilities",
-                    "--output",  "c:\\Users\\LukasHolecy\\source\\Github\\Output\\"
+                    "--output",  "${workspaceFolder}\\..\\Output\\"
+                ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console":  "internalConsole"
+        },
+        {
+            "name": "Main Arguments Local Only",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
+            "args": [
+                    "${workspaceFolder}\\..\\..\\Repos\\OfficeUtilities", "${workspaceFolder}\\..\\..\\Repos\\WordTools", "${workspaceFolder}\\..\\..\\Repos\\iManageUtilities", "${workspaceFolder}\\..\\..\\Repos\\ExcelUtilities", "${workspaceFolder}\\..\\..\\Repos\\PowerPointUtilities",
+                    "--output",  "${workspaceFolder}\\..\\Output\\",
+                    "--filter", "local"
+                ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console":  "internalConsole"
+        },
+        {
+            "name": "Single Plugin",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
+            "args": [
+                    "${workspaceFolder}\\..\\..\\Repos\\OfficeUtilities\\OfficeUtilities\\PluginHandler\\PluginHandler.csproj",
+                    "--output",  "${workspaceFolder}\\..\\Output\\"
                 ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
@@ -26,7 +55,22 @@
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
             "args": [
                     "${workspaceFolder}\\..\\..\\repos\\OfficeUtilities",
-                    "-o", "c:\\Users\\LukasHolecy\\source\\Github\\Output\\"
+                    "--output",  "${workspaceFolder}\\..\\Output\\"
+                ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console":  "internalConsole"
+        },
+        {
+            "name": "OfficeUtilitiesLocalOnly",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
+            "args": [
+                    "${workspaceFolder}\\..\\..\\repos\\OfficeUtilities",
+                    "--output",  "${workspaceFolder}\\..\\Output\\",
+                    "--filter", "local"
                 ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

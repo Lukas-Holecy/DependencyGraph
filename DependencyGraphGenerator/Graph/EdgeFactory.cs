@@ -32,11 +32,20 @@ internal static class EdgeFactory
 
     private static IEnumerable<Edge> GetProjectEdges(HashSet<Node> nodes, IProjectInformation projectInformation)
     {
-        var projectNode = nodes.First(n => n.IsSameProject(new Node(projectInformation)));
+        var projectNode = nodes.FirstOrDefault(n => n.IsSameProject(new Node(projectInformation)));
+        if (projectNode == null)
+        {
+            yield break;
+        }
 
         foreach (var reference in projectInformation.References)
         {
-            var referenceNode = nodes.First(n => n.IsSameProject(new Node(reference)));
+            var referenceNode = nodes.FirstOrDefault(n => n.IsSameProject(new Node(reference)));
+            if (referenceNode == null)
+            {
+                continue;
+            }
+
             yield return new Edge(projectNode, referenceNode);
         }
     }

@@ -43,7 +43,8 @@ public class ProjectInfoExtractorTests
         var fileInfo = mockFileSystem.FileInfo.New(projectPath);
 
         // Act
-        var result = ProjectInfoExtractor.TryExtractProjectInformation(fileInfo, out var projectInfo, mockFileSystem);
+        var result = ProjectInfoExtractor.TryExtractProjectInformation(
+            fileInfo, out var projectInfo, mockFileSystem, true);
 
         // Assert
         Assert.True(result);
@@ -87,7 +88,8 @@ public class ProjectInfoExtractorTests
         var fileInfo = mockFileSystem.FileInfo.New(projectPath);
 
         // Act
-        var result = ProjectInfoExtractor.TryExtractProjectInformation(fileInfo, out var projectInfo, mockFileSystem);
+        var result = ProjectInfoExtractor.TryExtractProjectInformation(
+            fileInfo, out var projectInfo, mockFileSystem, true);
 
         // Assert
         Assert.True(result);

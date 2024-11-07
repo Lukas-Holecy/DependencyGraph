@@ -35,6 +35,10 @@ internal class GraphDotGenerator
         algorithm.FormatVertex += (sender, args) =>
         {
             args.VertexFormat.Label = GetVertexLabel(args.Vertex);
+            if (!string.IsNullOrEmpty(args.Vertex.PackageId) && !string.IsNullOrEmpty(args.Vertex.Path))
+            {
+                args.VertexFormat.FillColor = GraphvizColor.LightBlue;
+            }
         };
     }
 
