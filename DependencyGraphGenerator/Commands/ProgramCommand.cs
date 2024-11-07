@@ -54,12 +54,15 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     [CommandOption("output", 'o', Description = "Path to the output file.")]
     public string OutputPath { get; init; } = string.Empty;
 
+    [CommandOption("filter", 'f', Description = "Filter for the graph.")]
+    public GraphFilter Filter { get; init; } = GraphFilter.All;
+
     /// <inheritdoc/>
     public async ValueTask ExecuteAsync(IConsole console)
     {
         var projects = new ProjectFinder(this.fileSystem).FindProjects(this.Paths);
         var projectInformation = ExtractAllProjectsInformation(projects);
-        var graph = new GraphFactory().CreateGraph(projectInformation);
+        var graph = new GraphFactory().CreateGraph(projectInformation, this.Filter);
 
         await console.Output.WriteLineAsync($"Information about individual projects:");
         var projectInformationStrings = string.Join(Environment.NewLine, projectInformation.Select(p => p.ToString()));

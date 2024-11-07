@@ -4,6 +4,7 @@
 
 namespace Holecy.Console.Dependencies.Graph;
 
+using System;
 using Holecy.Console.Dependencies.ProjectFiles;
 using QuikGraph;
 
@@ -17,9 +18,14 @@ internal class GraphFactory
     /// </summary>
     /// <param name="projectsInformation">information about discovered .net projects.</param>
     /// <returns>New graph objects with directional edges between projects and their dependencies.</returns>
-    public AdjacencyGraph<Node, Edge> CreateGraph(HashSet<IProjectInformation> projectsInformation)
+    public AdjacencyGraph<Node, Edge> CreateGraph(HashSet<IProjectInformation> projectsInformation, GraphFilter filter)
     {
         var nodes = NodeFactory.CreateNodes(projectsInformation);
+        if (filter == GraphFilter.Local)
+        {
+            nodes = this.GetFiltereNodes(nodes);
+        }
+
         var edges = EdgeFactory.CreateEdges(nodes, projectsInformation);
         AdjacencyGraph<Node, Edge> graph = new();
         foreach (var node in nodes)
@@ -33,5 +39,10 @@ internal class GraphFactory
         }
 
         return graph;
+    }
+
+    private HashSet<Node> GetFiltereNodes(HashSet<Node> nodes)
+    {
+        return nodes.Where(n => !string.IsNullOrEmpty(n.PackageId) && !string.IsNullOrEmpty(n.Path)).ToHashSet();
     }
 }
