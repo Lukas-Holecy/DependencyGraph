@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="CliFx" />
+    <PackageReference Include="Magick.NET.Core" />
     <PackageReference Include="Microsoft.Build">
         <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
@@ -22,7 +23,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-    <PackageReference Include="Microsoft.Msagl.GraphViewerGdi" />
     <PackageReference Include="QuikGraph" />
     <PackageReference Include="QuikGraph.Graphviz" />
     <PackageReference Include="QuikGraph.MSAGL" />

@@ -5,14 +5,15 @@
 namespace Holecy.Console.Dependencies.Commands;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using Holecy.Console.Dependencies.Graph;
 using QuikGraph;
-using Microsoft.Msagl.GraphViewerGdi;
 using Msagl = Microsoft.Msagl.Drawing;
 
 internal class GraphImageGenerator
 {
+    [SetsRequiredMembers]
     public GraphImageGenerator(AdjacencyGraph<Node, Edge> graph)
     {
         this.MsaglGraph = this.GetMsaglGraph(graph);
@@ -31,10 +32,7 @@ internal class GraphImageGenerator
 
     internal MemoryStream GenerateGraphPng()
     {
-        var renderer = new Msagl.GraphWriter GraphRenderer(this.MsaglGraph);
-        renderer.CalculateLayout();
-        var bitmap = new Bitmap(4096, 2160);
-        renderer.Render(bitmap);
+        // Need to create bitmap from svg, so svg will be moved to variable.
 
         var pngStream = new MemoryStream();
         bitmap.Save(pngStream, ImageFormat.Png);

@@ -17,7 +17,7 @@ namespace Holecy.Console.Dependencies.Commands
         /// <summary>
         /// Graph in .dot format.
         /// </summary>
-        Svn,
+        Svg,
 
         /// <summary>
         /// Graph in .png format.
