@@ -13,11 +13,13 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageVersion>
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Msagl.GraphViewerGdi" Version="1.1.7" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="QuickGraph" Version="3.6.61119.7" />
     <PackageVersion Include="QuikGraph" Version="2.5.0" />
     <PackageVersion Include="QuikGraph.Graphviz" Version="2.5.0" />
+    <PackageVersion Include="QuikGraph.MSAGL" Version="2.5.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.12.9">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -26,6 +28,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageVersion>
+    <PackageVersion Include="System.Drawing.Common" Version="8.0.10" />
     <PackageVersion Include="System.IO.Abstractions" Version="21.0.29" />
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="21.0.29" />
     <PackageVersion Include="TestableIO.System.IO.Abstractions.Analyzers" Version="2022.0.0">

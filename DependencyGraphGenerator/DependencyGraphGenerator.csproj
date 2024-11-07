@@ -22,8 +22,10 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Msagl.GraphViewerGdi" />
     <PackageReference Include="QuikGraph" />
     <PackageReference Include="QuikGraph.Graphviz" />
+    <PackageReference Include="QuikGraph.MSAGL" />
     <PackageReference Include="Roslynator.Analyzers">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -32,6 +34,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="System.Drawing.Common" />
     <PackageReference Include="System.IO.Abstractions" />
     <PackageReference Include="TestableIO.System.IO.Abstractions.Analyzers">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
