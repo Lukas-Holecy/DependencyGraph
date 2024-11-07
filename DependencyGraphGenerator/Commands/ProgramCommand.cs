@@ -57,6 +57,12 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     [CommandOption("filter", 'f', Description = "Filter for the graph.")]
     public GraphFilter Filter { get; init; } = GraphFilter.All;
 
+    [CommandOption("image", 'i', Description = "Path to the image file.")]
+    public ImageType ImageType { get; init; } = ImageType.None;
+
+    [CommandOption("format", 'f', Description = "Format of the image file.")]
+    public string ImagePath { get; init; } = styring.Empty;
+
     /// <inheritdoc/>
     public async ValueTask ExecuteAsync(IConsole console)
     {
@@ -64,19 +70,21 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
         var projectInformation = ExtractAllProjectsInformation(projects);
         var graph = new GraphFactory().CreateGraph(projectInformation, this.Filter);
 
-        await console.Output.WriteLineAsync($"Information about individual projects:");
+        await console.Output.WriteLineAsync("Information about individual projects:");
         var projectInformationStrings = string.Join(Environment.NewLine, projectInformation.Select(p => p.ToString()));
         await console.Output.WriteLineAsync(projectInformationStrings ?? string.Empty);
 
-        var nodesStrings = string.Join(Environment.NewLine, graph.Vertices.Select(n => n.ToString()));
-        await console.Output.WriteLineAsync($"Nodes in the graph:");
-        await console.Output.WriteLineAsync(nodesStrings ?? string.Empty);
-
         if (!string.IsNullOrWhiteSpace(this.OutputPath))
         {
-            var graphDot = new GraphDotGenerator(this.fileSystem).GenerateGraphDot(graph, this.OutputPath);
+            var graphDot = new GraphOutputGenerator(this.fileSystem).GenerateGraphDot(graph, this.OutputPath);
             FileSaver.SaveStringToFile(graphDot, this.OutputPath, this.fileSystem);
             await console.Output.WriteLineAsync($"Graph was written to the file: {this.OutputPath}");
+        }
+
+        if (this.ImageType != ImageType.None)
+        {
+            var image = new ImageGenerator(this.fileSystem).GenerateImage(graph, this.ImageType, this.ImagePath);
+            await console.Output.WriteLineAsync($"Image was written to the file: {this.ImagePath}");
         }
     }
 
