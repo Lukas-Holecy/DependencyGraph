@@ -17,6 +17,7 @@
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="QuickGraph" Version="3.6.61119.7" />
     <PackageVersion Include="QuikGraph" Version="2.5.0" />
+    <PackageVersion Include="QuikGraph.Graphviz" Version="2.5.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.12.9">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

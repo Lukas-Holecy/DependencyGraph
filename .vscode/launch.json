@@ -4,14 +4,16 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "Main Arguments",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
-            "args": ["${workspaceFolder}\\..\\..\\"],
+            "args": [
+                    "${workspaceFolder}\\..\\..\\Repos\\OfficeUtilities", "${workspaceFolder}\\..\\..\\Repos\\WordTools", "${workspaceFolder}\\..\\..\\Repos\\iManageUtilities", "${workspaceFolder}\\..\\..\\Repos\\ExcelUtilities", "${workspaceFolder}\\..\\..\\Repos\\PowerPointUtilities",
+                    "--output",  "c:\\Users\\LukasHolecy\\source\\Github\\Output\\"
+                ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console":  "internalConsole"
@@ -22,7 +24,10 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
-            "args": ["${workspaceFolder}\\..\\..\\repos\\OfficeUtilities"],
+            "args": [
+                    "${workspaceFolder}\\..\\..\\repos\\OfficeUtilities",
+                    "-o", "c:\\Users\\LukasHolecy\\source\\Github\\Output\\"
+                ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console":  "internalConsole"
