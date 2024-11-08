@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="CliFx" />
+    <PackageReference Include="jint" />
     <PackageReference Include="Magick.NET-Q8-AnyCPU" />
     <PackageReference Include="Microsoft.Build">
         <ExcludeAssets>runtime</ExcludeAssets>
@@ -40,6 +41,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+<ItemGroup>
+    <!-- Add viz.js as an embedded resource -->
+    <EmbeddedResource Include="Resources\viz-standalone.js" />
   </ItemGroup>
 
   <ItemGroup>
