@@ -9,27 +9,41 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Text;
 
-public class FileSaver
+/// <summary>
+/// Saves the content to the file.
+/// </summary>
+/// <param name="fileSystem">File System abstraction.</param>
+public class FileSaver(IFileSystem fileSystem)
 {
-    public static bool SaveStringToFile(string content, string path, IFileSystem fileSystem)
+    private readonly IFileSystem fileSystem = fileSystem;
+
+    /// <summary>
+    /// Saves the content to the file as UTF-8 string.
+    /// </summary>
+    /// <param name="content">String to save.</param>
+    /// <param name="path">Path to the file. This can be either a file path or directory.
+    /// If directory is used, the file DependencyGraph.dot will be used.
+    /// </param>
+    /// <returns>True if successful, false otherwise.</returns>
+    public bool SaveStringToFile(string content, string path)
     {
         try
         {
-            var outputPath = GetDotFilePath(path, fileSystem);
-            string directoryPath = fileSystem.Path.GetDirectoryName(outputPath) ?? string.Empty;
+            var outputPath = this.GetDotFilePath(path);
+            string directoryPath = this.fileSystem.Path.GetDirectoryName(outputPath) ?? string.Empty;
             if (string.IsNullOrEmpty(directoryPath))
             {
                 Console.WriteLine("Failed to get the directory path.");
                 return false;
             }
 
-            if (!fileSystem.Directory.Exists(directoryPath))
+            if (!this.fileSystem.Directory.Exists(directoryPath))
             {
-                fileSystem.Directory.CreateDirectory(directoryPath);
+                this.fileSystem.Directory.CreateDirectory(directoryPath);
             }
 
             // Overwrite the file with UTF-8 encoding
-            fileSystem.File.WriteAllText(outputPath, content, Encoding.UTF8);
+            this.fileSystem.File.WriteAllText(outputPath, content, Encoding.UTF8);
             Console.WriteLine($"File saved successfully at: {path}");
             return true;
         }
@@ -40,28 +54,73 @@ public class FileSaver
         }
     }
 
-    private static string GetDotFilePath(string outputPath, IFileSystem fileSystem)
+    /// <summary>
+    /// Saves the content to the file as bytes (stream).
+    /// </summary>
+    /// <param name="content">Stream to save.</param>
+    /// <param name="path">Path to the file. This can be either a file path or directory.
+    /// If directory is used, the file DependencyGraph.dot will be used.
+    /// </param>
+    /// <param name="extension">
+    /// Extension of the file. If left empty, extension in the <paramref name="path"/> will be used.
+    /// </param>
+    /// <returns>True if successful, false otherwise.</returns>
+    public bool SaveStreamToFile(MemoryStream content, string path, string extension = "")
     {
-        if (fileSystem.Path.HasExtension(outputPath) && fileSystem.File.Exists(outputPath))
+        try
         {
-            return GetFilePath(outputPath, fileSystem);
+            var outputPath = this.GetDotFilePath(path);
+            if (!string.IsNullOrEmpty(extension))
+            {
+                outputPath = this.fileSystem.Path.ChangeExtension(outputPath, extension);
+            }
+
+            string directoryPath = this.fileSystem.Path.GetDirectoryName(outputPath) ?? string.Empty;
+            if (string.IsNullOrEmpty(directoryPath))
+            {
+                Console.WriteLine("Failed to get the directory path.");
+                return false;
+            }
+
+            if (!this.fileSystem.Directory.Exists(directoryPath))
+            {
+                this.fileSystem.Directory.CreateDirectory(directoryPath);
+            }
+
+            // Overwrite the file with UTF-8 encoding
+            this.fileSystem.File.WriteAllBytes(outputPath, content.ToArray());
+            Console.WriteLine($"File saved successfully at: {path}");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to save the file: {ex.Message}");
+            return false;
+        }
+    }
+
+    private string GetDotFilePath(string outputPath)
+    {
+        if (this.fileSystem.Path.HasExtension(outputPath) && this.fileSystem.File.Exists(outputPath))
+        {
+            return this.GetFilePath(outputPath);
         }
 
-        return GetDirectoryPath(outputPath, fileSystem);
+        return this.GetDirectoryPath(outputPath);
     }
 
-    private static string GetDirectoryPath(string outputPath, IFileSystem fileSystem)
+    private string GetDirectoryPath(string outputPath)
     {
-        var fullPath = fileSystem.Path.Combine(outputPath, "DependencyGraph.dot");
-        return GetFilePath(fullPath, fileSystem);
+        var fullPath = this.fileSystem.Path.Combine(outputPath, "DependencyGraph.dot");
+        return this.GetFilePath(fullPath);
     }
 
-    private static string GetFilePath(string outputPath, IFileSystem fileSystem)
+    private string GetFilePath(string outputPath)
     {
         try
         {
             // FileInfo will throw if the path is invalid
-            var fileInfo = fileSystem.FileInfo.New(outputPath);
+            var fileInfo = this.fileSystem.FileInfo.New(outputPath);
             return outputPath;
         }
         catch (Exception)
@@ -69,5 +128,4 @@ public class FileSaver
             return string.Empty;
         }
     }
-
 }

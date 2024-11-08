@@ -17,13 +17,14 @@ internal class GraphFactory
     /// Creates a graph from the provided projects information.
     /// </summary>
     /// <param name="projectsInformation">information about discovered .net projects.</param>
+    /// <param name="filter">Filter for the graph.</param>
     /// <returns>New graph objects with directional edges between projects and their dependencies.</returns>
     public AdjacencyGraph<Node, Edge> CreateGraph(HashSet<IProjectInformation> projectsInformation, GraphFilter filter)
     {
         var nodes = NodeFactory.CreateNodes(projectsInformation);
         if (filter == GraphFilter.Local)
         {
-            nodes = this.GetFiltereNodes(nodes);
+            nodes = this.GetFilteredNodes(nodes);
         }
 
         var edges = EdgeFactory.CreateEdges(nodes, projectsInformation);
@@ -41,7 +42,7 @@ internal class GraphFactory
         return graph;
     }
 
-    private HashSet<Node> GetFiltereNodes(HashSet<Node> nodes)
+    private HashSet<Node> GetFilteredNodes(HashSet<Node> nodes)
     {
         return nodes.Where(n => !string.IsNullOrEmpty(n.PackageId) && !string.IsNullOrEmpty(n.Path)).ToHashSet();
     }
