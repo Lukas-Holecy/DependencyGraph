@@ -5,6 +5,7 @@
 namespace Holecy.Console.Dependencies.Commands;
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CliFx;
@@ -14,6 +15,7 @@ using CliFx.Infrastructure;
 using Holecy.Console.Dependencies.Graph;
 using Holecy.Console.Dependencies.IO;
 using Holecy.Console.Dependencies.ProjectFiles;
+using QuikGraph;
 
 /// <summary>
 /// Represents the main command responsible for processing specified file or directory paths and creating
@@ -54,14 +56,26 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     [CommandOption("output", 'o', Description = "Path to the output file.")]
     public string OutputPath { get; init; } = string.Empty;
 
+    /// <summary>
+    /// Gets the filter for the graph. If "Local" is specified, only projects with PackageId and Path will be included.
+    /// These are the projects available in the local file system.
+    /// </summary>
+    /// <seealso cref="GraphFilter"/>
     [CommandOption("filter", 'f', Description = "Filter for the graph.")]
     public GraphFilter Filter { get; init; } = GraphFilter.All;
 
-    [CommandOption("image", 'i', Description = "Path to the image file.")]
+    /// <summary>
+    /// Gets the type of the image file to generate.
+    /// </summary>
+    /// <seealso cref="ImageType"/>
+    [CommandOption("image", 'i', Description = "Format of the image file.")]
     public ImageType ImageType { get; init; } = ImageType.None;
 
-    [CommandOption("format", 'f', Description = "Format of the image file.")]
-    public string ImagePath { get; init; } = styring.Empty;
+    /// <summary>
+    /// Gets the path to where to save the image file.
+    /// </summary>
+    [CommandOption("image-path", Description = "Path where the image file will be saved.")]
+    public string ImagePath { get; init; } = string.Empty;
 
     /// <inheritdoc/>
     public async ValueTask ExecuteAsync(IConsole console)
@@ -76,15 +90,14 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
 
         if (!string.IsNullOrWhiteSpace(this.OutputPath))
         {
-            var graphDot = new GraphOutputGenerator(this.fileSystem).GenerateGraphDot(graph, this.OutputPath);
-            FileSaver.SaveStringToFile(graphDot, this.OutputPath, this.fileSystem);
+            var graphDot = GraphDotGenerator.GenerateGraphDot(graph);
+            new FileSaver(this.fileSystem).SaveStringToFile(graphDot, this.OutputPath);
             await console.Output.WriteLineAsync($"Graph was written to the file: {this.OutputPath}");
         }
 
         if (this.ImageType != ImageType.None)
         {
-            var image = new ImageGenerator(this.fileSystem).GenerateImage(graph, this.ImageType, this.ImagePath);
-            await console.Output.WriteLineAsync($"Image was written to the file: {this.ImagePath}");
+            this.GenerateImages(graph);
         }
     }
 
@@ -100,5 +113,20 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
         }
 
         return allProjectsInformation;
+    }
+
+    private void GenerateImages(AdjacencyGraph<Node, Edge> graph)
+    {
+        if (this.ImageType == ImageType.Both || this.ImageType == ImageType.Svg)
+        {
+            var svgStream = new MemoryStream(new GraphImageGenerator(graph).GenerateGraphSvg());
+            new FileSaver(this.fileSystem).SaveStreamToFile(svgStream, this.ImagePath, "svg");
+        }
+
+        if (this.ImageType == ImageType.Both || this.ImageType == ImageType.Png)
+        {
+            var pngStream = new MemoryStream(new GraphImageGenerator(graph).GenerateGraphPng());
+            new FileSaver(this.fileSystem).SaveStreamToFile(pngStream, this.ImagePath, "png");
+        }
     }
 }

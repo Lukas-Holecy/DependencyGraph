@@ -4,6 +4,9 @@
 
 namespace Holecy.Console.Dependencies;
 
+/// <summary>
+/// Specifies the filter for the graph.
+/// </summary>
 internal enum GraphFilter
 {
     /// <summary>

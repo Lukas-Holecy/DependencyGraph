@@ -5,6 +5,7 @@
   <ItemGroup>
     <PackageVersion Include="CliFx" Version="2.3.5" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <PackageVersion Include="Magick.NET-Q8-AnyCPU" Version="14.0.0" />
     <PackageVersion Include="Magick.NET.Core" Version="14.0.0" />
     <PackageVersion Include="Microsoft.Build" Version="17.12.6" />
     <PackageVersion Include="Microsoft.Build.Locator" Version="1.7.8" />

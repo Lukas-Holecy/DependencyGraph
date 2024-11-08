@@ -27,7 +27,9 @@
             "args": [
                     "${workspaceFolder}\\..\\..\\Repos\\OfficeUtilities", "${workspaceFolder}\\..\\..\\Repos\\WordTools", "${workspaceFolder}\\..\\..\\Repos\\iManageUtilities", "${workspaceFolder}\\..\\..\\Repos\\ExcelUtilities", "${workspaceFolder}\\..\\..\\Repos\\PowerPointUtilities",
                     "--output",  "${workspaceFolder}\\..\\Output\\",
-                    "--filter", "local"
+                    "--filter", "local",
+                    "--image", "both",
+                    "--image-path", "${workspaceFolder}\\..\\Output\\"
                 ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

@@ -5,5 +5,6 @@
         <LicenseUrl>https://opensource.org/licenses/MIT</LicenseUrl>
         <Copyright>Copyright © MyCompany 2023</Copyright>
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 </Project>

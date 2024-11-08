@@ -105,6 +105,7 @@ internal static class ProjectInfoExtractor
     /// </summary>
     /// <param name="projectFile">Project file to be interrogated.</param>
     /// <returns>Information extracted from the project file.</returns>
+    /// <param name="fileSystem">File system abstraction to be used for file operations.</param>
     /// <param name="useStreams">
     /// True if streams should be used for reading the project file, false otherwise.
     /// This is needed for testing purposes.
