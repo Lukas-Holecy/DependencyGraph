@@ -5,6 +5,7 @@
 namespace Holecy.Console.Dependencies.Graph;
 
 using System;
+using System.Text.RegularExpressions;
 using Holecy.Console.Dependencies.ProjectFiles;
 using QuikGraph;
 
@@ -13,6 +14,8 @@ using QuikGraph;
 /// </summary>
 internal class GraphFactory
 {
+    private static readonly Regex FolderPathRegex = new(@"^[a-zA-Z]:\\(?:[^<>:""/\\|?*]+\\)*$", RegexOptions.Compiled);
+
     /// <summary>
     /// Creates a graph from the provided projects information.
     /// </summary>
@@ -22,9 +25,14 @@ internal class GraphFactory
     public AdjacencyGraph<Node, Edge> CreateGraph(HashSet<IProjectInformation> projectsInformation, GraphFilter filter)
     {
         var nodes = NodeFactory.CreateNodes(projectsInformation);
-        if (filter == GraphFilter.Local)
+        if (filter == GraphFilter.PathAndPackage)
         {
-            nodes = this.GetFilteredNodes(nodes);
+            nodes = GetFilteredNodesWithPathAndPackageId(nodes);
+        }
+
+        if (filter == GraphFilter.LocalPath)
+        {
+            nodes = GetFilteredNodesWithLocalId(nodes);
         }
 
         var edges = EdgeFactory.CreateEdges(nodes, projectsInformation);
@@ -42,8 +50,15 @@ internal class GraphFactory
         return graph;
     }
 
-    private HashSet<Node> GetFilteredNodes(HashSet<Node> nodes)
+    private static HashSet<Node> GetFilteredNodesWithPathAndPackageId(HashSet<Node> nodes)
     {
         return nodes.Where(n => !string.IsNullOrEmpty(n.PackageId) && !string.IsNullOrEmpty(n.Path)).ToHashSet();
+    }
+
+    private static HashSet<Node> GetFilteredNodesWithLocalId(HashSet<Node> nodes)
+    {
+        return nodes
+            .Where(n => !string.IsNullOrEmpty(n.Path) && FolderPathRegex.IsMatch(n.Path))
+            .ToHashSet();
     }
 }

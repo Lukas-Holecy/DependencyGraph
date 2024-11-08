@@ -15,6 +15,9 @@ using Msagl = Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.Miscellaneous;
 using Microsoft.Msagl.Core;
+using System.Reflection;
+using Jint;
+using CliFx.Extensibility;
 
 /// <summary>
 /// Generates image from the graph.
@@ -44,66 +47,10 @@ internal class GraphImageGenerator
     /// <returns>Byte array with an svg image of the graph.</returns>
     internal byte[] GenerateGraphSvg()
     {
-        // Step 1: Create a new graph
-        // Msagl.Graph graph = new Msagl.Graph("sampleGraph");
-        // graph.AddEdge("Node1", "Node2");
-        // graph.AddEdge("Node2", "Node3");
-        // graph.AddEdge("Node3", "Node1");
+        var renderer = new GraphRenderer();
+        var svg = renderer.RenderGraph(this.MsaglGraph.ToString());
 
-        // // Customize nodes if desired
-        // Msagl.Node node1 = graph.FindNode("Node1");
-        // node1.Attr.Shape = Msagl.Shape.Circle;
-        // node1.Attr.FillColor = Msagl.Color.LightBlue;
-
-        // foreach(Msagl.Node node in graph.Nodes)
-        // {
-        //     node.LabelText = "Node";
-        //     node.Attr.Shape = Msagl.Shape.Circle;
-        //     node.Attr.FillColor = Msagl.Color.LightBlue;
-        // }
-        foreach (var node in this.MsaglGraph.Nodes)
-        {
-            if (node != null)
-            {
-                node.Attr.Shape = Msagl.Shape.Circle;
-                node.Attr.FillColor = Msagl.Color.LightBlue;
-                node.LabelText = "nodeId"; // Set label text to ensure node has content
-            }
-        }
-
-        this.MsaglGraph.CreateGeometryGraph();
-
-        var layoutSettings = new SugiyamaLayoutSettings();  // Layered layout suitable for directed graphs
-        var graphLayout = new Microsoft.Msagl.Core.Layout.GeometryGraph();
-        var cancelToken = new CancelToken();
-        LayoutHelpers.CalculateLayout(this.MsaglGraph.GeometryGraph, layoutSettings, cancelToken);
-        using var svgStream = new MemoryStream();
-        var svgWriter = new Msagl.SvgGraphWriter(svgStream, this.MsaglGraph);
-
-        svgWriter.Write();
-        svgStream.Position = 0;
-        this.svgBytes = svgStream.ToArray();
-
-        // // Step 1: Create a new graph
-        // Msagl.Graph graph = new Msagl.Graph("sampleGraph");
-        // graph.AddEdge("Node1", "Node2");
-        // graph.AddEdge("Node2", "Node3");
-        // graph.AddEdge("Node3", "Node1");
-
-        // // Customize nodes if desired
-        // Msagl.Node node1 = graph.FindNode("Node1");
-        // node1.Attr.Shape = Msagl.Shape.Circle;
-        // node1.Attr.FillColor = Msagl.Color.LightBlue;
-
-        // // Step 2: Write the graph as SVG to a file
-        // using (FileStream fileStream = new FileStream("outputGraph.svg", FileMode.Create, FileAccess.Write))
-        // {
-        //     var svgWriter = new Msagl.SvgGraphWriter(fileStream, graph);
-        //     svgWriter.Write();  // Converts and writes to the file stream
-        // }
-
-        // //Console.WriteLine("SVG file has been saved as outputGraph.svg");
-        return [];//this.svgBytes;
+        return [];
     }
 
     /// <summary>

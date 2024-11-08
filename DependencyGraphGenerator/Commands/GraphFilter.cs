@@ -15,7 +15,12 @@ internal enum GraphFilter
     All,
 
     /// <summary>
-    /// Represents a filter that includes only to other local projects.
+    /// Represents a filter that includes only the nods with both path and package.
     /// </summary>
-    Local,
+    PathAndPackage,
+
+    /// <summary>
+    /// Represents a filter that includes only the nods with valid local path.
+    /// </summary>
+    LocalPath,
 }
