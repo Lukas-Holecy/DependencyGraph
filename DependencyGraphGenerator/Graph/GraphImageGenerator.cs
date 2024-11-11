@@ -4,51 +4,31 @@
 
 namespace Holecy.Console.Dependencies.Graph;
 
-using System.Diagnostics.CodeAnalysis;
-using Holecy.Console.Dependencies.Graph;
-using ImageMagick;
-using QuikGraph;
-using QuikGraph.MSAGL;
-using Microsoft.Msagl.Core.Layout;
-using Msagl = Microsoft.Msagl.Drawing;
-
-using Microsoft.Msagl.Layout.Layered;
-using Microsoft.Msagl.Miscellaneous;
-using Microsoft.Msagl.Core;
-using System.Reflection;
-using Jint;
-using CliFx.Extensibility;
-
 /// <summary>
 /// Generates image from the graph.
 /// </summary>
-internal class GraphImageGenerator
+/// <remarks>
+/// Initializes a new instance of the <see cref="GraphImageGenerator"/> class.
+/// </remarks>
+/// <param name="graphDot">Dependency graph from which the image will be created in its dot format.</param>
+internal class GraphImageGenerator(string graphDot)
 {
-    private byte[] svgBytes = [];
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="GraphImageGenerator"/> class.
-    /// </summary>
-    /// <param name="graph">Dependency graph from which the image will be created.</param>
-    [SetsRequiredMembers]
-    public GraphImageGenerator(AdjacencyGraph<Node, Edge> graph)
-    {
-        this.MsaglGraph = GetMsaglGraph(graph);
-    }
-
-    /// <summary>
-    /// Gets the MSAGL representation of the graph given in the constructor.
-    /// </summary>
-    public required Msagl.Graph MsaglGraph { get; init; }
+    private readonly string graphDot = graphDot;
 
     /// <summary>
     /// Creates an SVG representation of the graph in byte array.
     /// </summary>
     /// <returns>Byte array with an svg image of the graph.</returns>
-    internal byte[] GenerateGraphSvg()
+    internal async Task<byte[]> GenerateGraphSvg()
     {
-        var renderer = new GraphRenderer();
-        var svg = renderer.RenderGraph(this.MsaglGraph.ToString());
+        await using var svgStream = await new GraphVizSvgGenerator().GenerateSVGStreamAsync(this.graphDot);
+        if (svgStream.Length > 0)
+        {
+            var svgBytes = new byte[svgStream.Length];
+            using var cancellationTokenSource = new CancellationTokenSource();
+            await svgStream.ReadAsync(svgBytes, cancellationTokenSource.Token);
+            return svgBytes;
+        }
 
         return [];
     }
@@ -57,21 +37,17 @@ internal class GraphImageGenerator
     /// Creates a PNG representation of the graph in byte array.
     /// </summary>
     /// <returns>Byte array with an png image of the graph.</returns>
-    internal byte[] GenerateGraphPng()
+    internal async Task<byte[]> GenerateGraphPng()
     {
-        // Need to create bitmap from svg, so svg will be moved to variable.
-        using var svgStream = new MemoryStream(this.svgBytes);
-        svgStream.Position = 0;
-        using var magickImage = new MagickImage(svgStream, MagickFormat.Svg);
-        using var pngStream = new MemoryStream();
-        magickImage.Write(pngStream, MagickFormat.Png);
-        pngStream.Position = 0;
+        await using var pngStream = await new GraphVizSvgGenerator().GeneratePNGStreamAsync(this.graphDot);
+        if (pngStream.Length > 0)
+        {
+            var svgBytes = new byte[pngStream.Length];
+            using var cancellationTokenSource = new CancellationTokenSource();
+            await pngStream.ReadAsync(svgBytes, cancellationTokenSource.Token);
+            return svgBytes;
+        }
 
-        return pngStream.ToArray();
-    }
-
-    private static Msagl.Graph GetMsaglGraph(AdjacencyGraph<Node, Edge> graph)
-    {
-        return graph.ToMsaglGraph();
+        return [];
     }
 }

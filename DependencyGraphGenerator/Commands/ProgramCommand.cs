@@ -82,22 +82,19 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     {
         var projects = new ProjectFinder(this.fileSystem).FindProjects(this.Paths);
         var projectInformation = ExtractAllProjectsInformation(projects);
-        var graph = new GraphFactory().CreateGraph(projectInformation, this.Filter);
+        var graph = new GraphFactory(this.fileSystem).CreateGraph(projectInformation, this.Filter);
 
-        await console.Output.WriteLineAsync("Information about individual projects:");
-        var projectInformationStrings = string.Join(Environment.NewLine, projectInformation.Select(p => p.ToString()));
-        await console.Output.WriteLineAsync(projectInformationStrings ?? string.Empty);
+        var graphDot = GraphDotGenerator.GenerateGraphDot(graph);
 
         if (!string.IsNullOrWhiteSpace(this.OutputPath))
         {
-            var graphDot = GraphDotGenerator.GenerateGraphDot(graph);
             new FileSaver(this.fileSystem).SaveStringToFile(graphDot, this.OutputPath);
             await console.Output.WriteLineAsync($"Graph was written to the file: {this.OutputPath}");
         }
 
         if (this.ImageType != ImageType.None)
         {
-            this.GenerateImages(graph);
+            await this.GenerateImages(graphDot);
         }
     }
 
@@ -115,17 +112,18 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
         return allProjectsInformation;
     }
 
-    private void GenerateImages(AdjacencyGraph<Node, Edge> graph)
+    private async Task GenerateImages(string graph)
     {
+        var imageGenerator = new GraphImageGenerator(graph);
         if (this.ImageType == ImageType.Both || this.ImageType == ImageType.Svg)
         {
-            var svgStream = new MemoryStream(new GraphImageGenerator(graph).GenerateGraphSvg());
+            var svgStream = new MemoryStream(await imageGenerator.GenerateGraphSvg());
             new FileSaver(this.fileSystem).SaveStreamToFile(svgStream, this.ImagePath, "svg");
         }
 
         if (this.ImageType == ImageType.Both || this.ImageType == ImageType.Png)
         {
-            var pngStream = new MemoryStream(new GraphImageGenerator(graph).GenerateGraphPng());
+            var pngStream = new MemoryStream(await imageGenerator.GenerateGraphPng());
             new FileSaver(this.fileSystem).SaveStreamToFile(pngStream, this.ImagePath, "png");
         }
     }

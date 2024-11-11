@@ -12,8 +12,6 @@
 
   <ItemGroup>
     <PackageReference Include="CliFx" />
-    <PackageReference Include="jint" />
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" />
     <PackageReference Include="Microsoft.Build">
         <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
@@ -26,7 +24,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="QuikGraph" />
     <PackageReference Include="QuikGraph.Graphviz" />
-    <PackageReference Include="QuikGraph.MSAGL" />
     <PackageReference Include="Roslynator.Analyzers">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
