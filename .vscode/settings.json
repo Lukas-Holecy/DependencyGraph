@@ -4,6 +4,8 @@
         "Jint",
         "Magick",
         "Msagl",
-        "Quik"
+        "Quik",
+        "Tpng",
+        "Tsvg"
     ]
 }

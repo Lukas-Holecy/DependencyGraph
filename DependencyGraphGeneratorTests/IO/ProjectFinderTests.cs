@@ -219,7 +219,7 @@ public class ProjectFinderTests
     }
 
     /// <summary>
-    /// Tests that <see cref="ProjectFinder.FindProjectsInDirectory(IFileOrDirectoryInfo)"/> returns
+    /// Tests that <see cref="ProjectFinder.FindProjects(IFileOrDirectoryInfo)"/> returns
     /// an empty collection when no .csproj files are present in the specified directory.
     /// </summary>
     [Fact]

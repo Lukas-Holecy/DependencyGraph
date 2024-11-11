@@ -5,6 +5,7 @@
 namespace Holecy.Console.Dependencies.Graph;
 
 using System;
+using System.IO.Abstractions;
 using System.Text.RegularExpressions;
 using Holecy.Console.Dependencies.ProjectFiles;
 using QuikGraph;
@@ -12,9 +13,9 @@ using QuikGraph;
 /// <summary>
 /// Factory for creating Dependency graph.
 /// </summary>
-internal class GraphFactory
+internal class GraphFactory(IFileSystem fileSystem)
 {
-    private static readonly Regex FolderPathRegex = new(@"^[a-zA-Z]:\\(?:[^<>:""/\\|?*]+\\)*$", RegexOptions.Compiled);
+    private readonly IFileSystem fileSystem = fileSystem;
 
     /// <summary>
     /// Creates a graph from the provided projects information.
@@ -32,7 +33,7 @@ internal class GraphFactory
 
         if (filter == GraphFilter.LocalPath)
         {
-            nodes = GetFilteredNodesWithLocalId(nodes);
+            nodes = this.GetFilteredNodesWithLocalId(nodes);
         }
 
         var edges = EdgeFactory.CreateEdges(nodes, projectsInformation);
@@ -55,10 +56,17 @@ internal class GraphFactory
         return nodes.Where(n => !string.IsNullOrEmpty(n.PackageId) && !string.IsNullOrEmpty(n.Path)).ToHashSet();
     }
 
-    private static HashSet<Node> GetFilteredNodesWithLocalId(HashSet<Node> nodes)
+    private HashSet<Node> GetFilteredNodesWithLocalId(HashSet<Node> nodes)
     {
         return nodes
-            .Where(n => !string.IsNullOrEmpty(n.Path) && FolderPathRegex.IsMatch(n.Path))
+            .Where(n => this.IsLocalProject(n))
             .ToHashSet();
+    }
+
+    private bool IsLocalProject(Node n)
+    {
+        return !string.IsNullOrEmpty(n.Path) &&
+        this.fileSystem.Path.GetExtension(n.Path) == ".csproj" &&
+        this.fileSystem.File.Exists(n.Path);
     }
 }

@@ -66,7 +66,7 @@ internal class ProjectFinder(IFileSystem fileSystem)
     /// <returns>
     /// An enumerable of <see cref="IFileInfo"/> representing the found C# project files.
     /// </returns>
-    private IEnumerable<IFileInfo> FindProjectsInDirectory(IFileOrDirectoryInfo directory)
+    private HashSet<IFileInfo> FindProjectsInDirectory(IFileOrDirectoryInfo directory)
     {
         HashSet<IFileInfo> projectFiles = [];
         var fullPath = directory.FileSystemInfo.FullName;
