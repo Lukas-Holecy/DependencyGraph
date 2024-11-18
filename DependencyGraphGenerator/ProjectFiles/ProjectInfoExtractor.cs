@@ -5,7 +5,6 @@
 namespace Holecy.Console.Dependencies.ProjectFiles;
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Xml;
 using Microsoft.Build.Construction;
