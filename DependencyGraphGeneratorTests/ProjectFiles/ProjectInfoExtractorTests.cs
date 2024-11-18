@@ -4,6 +4,7 @@
 
 namespace Holecy.Console.Dependencies.Tests.ProjectFiles;
 
+using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using Holecy.Console.Dependencies.ProjectFiles;
 using Xunit;
@@ -14,7 +15,7 @@ using Xunit;
 public class ProjectInfoExtractorTests
 {
     /// <summary>
-    /// Tests that <see cref="ProjectInfoExtractor.TryExtractProjectInformation"/>
+    /// Tests that <see cref="ProjectInfoExtractor.TryExtractProjectInformation(System.IO.Abstractions.IFileInfo, out ProjectInformation?, IFileSystem, bool)"/>
     /// returns <c>true</c> and correctly extracts information from a valid project file.
     /// </summary>
     /// <param name="projectContent">The content of the project file.</param>
@@ -59,7 +60,7 @@ public class ProjectInfoExtractorTests
     }
 
         /// <summary>
-    /// Tests that <see cref="ProjectInfoExtractor.TryExtractProjectInformation"/>
+    /// Tests that <see cref="ProjectInfoExtractor.TryExtractProjectInformation(System.IO.Abstractions.IFileInfo, out ProjectInformation?, IFileSystem, bool)"/>
     /// returns <c>true</c> and correctly extracts information from a valid project file.
     /// </summary>
     /// <param name="projectContent">The content of the project file.</param>
@@ -104,7 +105,7 @@ public class ProjectInfoExtractorTests
     }
 
     /// <summary>
-    /// Tests that <see cref="ProjectInfoExtractor.TryExtractProjectInformation"/>
+    /// Tests that <see cref="ProjectInfoExtractor.TryExtractProjectInformation(System.IO.Abstractions.IFileInfo, out ProjectInformation?, IFileSystem, bool)"/>
     /// returns <c>false</c> when provided with an invalid project file.
     /// </summary>
     [Fact]
@@ -126,7 +127,7 @@ public class ProjectInfoExtractorTests
     }
 
     /// <summary>
-    /// Tests that <see cref="ProjectInfoExtractor.TryExtractProjectInformation"/>
+    /// Tests that <see cref="ProjectInfoExtractor.TryExtractProjectInformation(System.IO.Abstractions.IFileInfo, out ProjectInformation?, IFileSystem, bool)"/>
     /// returns <c>false</c> when the project file does not exist.
     /// </summary>
     [Fact]
