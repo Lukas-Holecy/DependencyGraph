@@ -5,17 +5,14 @@
 namespace Holecy.Console.Dependencies.Commands;
 
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CliFx;
 using CliFx.Attributes;
-using CliFx.Exceptions;
 using CliFx.Infrastructure;
 using Holecy.Console.Dependencies.Graph;
 using Holecy.Console.Dependencies.IO;
 using Holecy.Console.Dependencies.ProjectFiles;
-using QuikGraph;
 
 /// <summary>
 /// Represents the main command responsible for processing specified file or directory paths and creating

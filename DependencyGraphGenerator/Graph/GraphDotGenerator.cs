@@ -4,11 +4,7 @@
 
 namespace Holecy.Console.Dependencies.Graph;
 
-using System;
-using System.IO.Abstractions;
-using System.Threading.Tasks;
 using QuikGraph;
-using QuikGraph.Algorithms;
 using QuikGraph.Graphviz;
 using QuikGraph.Graphviz.Dot;
 
