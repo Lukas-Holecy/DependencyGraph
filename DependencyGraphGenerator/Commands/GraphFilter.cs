@@ -2,7 +2,7 @@
 // Copyright (c) Lukas Holecy. All rights reserved.
 // </copyright>
 
-namespace Holecy.Console.Dependencies;
+namespace Holecy.Console.Dependencies.Commands;
 
 /// <summary>
 /// Specifies the filter for the graph.
