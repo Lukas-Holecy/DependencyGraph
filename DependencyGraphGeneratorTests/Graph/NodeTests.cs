@@ -4,7 +4,6 @@
 
 namespace Holecy.Console.Dependencies.Tests.Graph;
 
-using System.Runtime.InteropServices;
 using Holecy.Console.Dependencies.Graph;
 using Holecy.Console.Dependencies.ProjectFiles;
 using Moq;
