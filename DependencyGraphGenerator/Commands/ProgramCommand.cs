@@ -80,19 +80,18 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
         var projects = new ProjectFinder(this.fileSystem).FindProjects(this.Paths);
         var projectInformation = ExtractAllProjectsInformation(projects);
         var graph = new GraphFactory(this.fileSystem).CreateGraph(projectInformation, this.Filter);
-
         var graphDot = GraphDotGenerator.GenerateGraphDot(graph);
 
-        if (!string.IsNullOrWhiteSpace(this.OutputPath))
-        {
-            new FileSaver(this.fileSystem).SaveStringToFile(graphDot, this.OutputPath);
-            await console.Output.WriteLineAsync($"Graph was written to the file: {this.OutputPath}");
-        }
+        await this.OutputGraph(console, graphDot);
 
-        if (this.ImageType != ImageType.None)
+        var imageCommand = new ImageCommand(this.fileSystem)
         {
-            await this.GenerateImages(graphDot);
-        }
+            DotGraph = graphDot,
+            ImageType = this.ImageType,
+            ImagePath = this.ImagePath,
+        };
+
+        await imageCommand.ExecuteAsync(console);
     }
 
     private static HashSet<IProjectInformation> ExtractAllProjectsInformation(IEnumerable<IFileInfo> projects)
@@ -107,6 +106,24 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
         }
 
         return allProjectsInformation;
+    }
+
+    /// <summary>
+    /// Outputs the graph to the console or to the file.
+    /// </summary>
+    /// <param name="console">Console abstraction for text output.</param>
+    /// <param name="graphDot">Dot representation of a graph.</param>
+    /// <returns>Task with no return value.</returns>
+    private async Task OutputGraph(IConsole console, string graphDot)
+    {
+        if (string.IsNullOrWhiteSpace(this.OutputPath))
+        {
+            await console.Output.WriteLineAsync(graphDot);
+            return;
+        }
+
+        new FileSaver(this.fileSystem).SaveStringToFile(graphDot, this.OutputPath);
+        await console.Output.WriteLineAsync($"Graph was written to the file: {this.OutputPath}");
     }
 
     private async Task GenerateImages(string graph)

@@ -4,9 +4,7 @@
 
 namespace Holecy.Console.Dependencies.Graph;
 
-using System;
 using System.IO.Abstractions;
-using System.Text.RegularExpressions;
 using Holecy.Console.Dependencies.Commands;
 using Holecy.Console.Dependencies.ProjectFiles;
 using QuikGraph;
