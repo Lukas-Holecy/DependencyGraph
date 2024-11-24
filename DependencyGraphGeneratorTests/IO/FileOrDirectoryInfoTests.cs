@@ -43,7 +43,7 @@ public class FileOrDirectoryInfoTests
     public void Constructor_ShouldInitializeAsDirectory_WhenPathIsDirectory()
     {
         // Arrange
-        var path = "testDir";
+        const string path = "testDir";
         var mockFileSystem = new Mock<IFileSystem>();
         var mockDirectoryInfo = new Mock<IDirectoryInfo>();
         mockFileSystem.Setup(fs => fs.File.Exists(path)).Returns(false);

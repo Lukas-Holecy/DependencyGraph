@@ -85,7 +85,7 @@ internal static class ProjectInfoExtractor
     internal static bool TryExtractProjectInformation(
         IFileInfo projectFile, out ProjectInformation? projectInformation, bool useStreams = false)
     {
-        return TryExtractProjectInformation(projectFile, out projectInformation, new FileSystem());
+        return TryExtractProjectInformation(projectFile, out projectInformation, new FileSystem(), useStreams);
     }
 
     private static void ProcessException(Exception ex)
