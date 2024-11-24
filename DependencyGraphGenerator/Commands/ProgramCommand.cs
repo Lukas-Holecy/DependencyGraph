@@ -13,6 +13,7 @@ using CliFx.Infrastructure;
 using Holecy.Console.Dependencies.Graph;
 using Holecy.Console.Dependencies.IO;
 using Holecy.Console.Dependencies.ProjectFiles;
+using QuikGraph;
 
 /// <summary>
 /// Represents the main command responsible for processing specified file or directory paths and creating
@@ -25,6 +26,9 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     /// The file system abstraction used for file and directory operations.
     /// </summary>
     private readonly IFileSystem fileSystem = fileSystem;
+    private string graphDot = string.Empty;
+    private string graphML = string.Empty;
+    private string projectsList = string.Empty;
 
     /// <summary>
     /// Gets positional parameter for paths (files or directories).
@@ -45,28 +49,40 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     public string LogPath { get; init; } = string.Empty;
 
     /// <summary>
+    /// Gets the output type (None, GraphML, Dot or Both) for outputting the graph.
+    /// </summary>
+    [CommandOption("output-type", 'o', Description = "Output type (None, GraphML, Dot or Both).")]
+    public OutputTypes OutputType { get; init; } = OutputTypes.None;
+
+    /// <summary>
     /// Gets the path to the output file.
     /// </summary>
     /// <remarks>
     /// This option can be specified using -o or --output.
     /// </remarks>
-    [CommandOption("output", 'o', Description = "Path to the output file.")]
+    [CommandOption("output-path", 'p', Description = "Path to the output file.")]
     public string OutputPath { get; init; } = string.Empty;
 
     /// <summary>
     /// Gets the filter for the graph. If "Local" is specified, only projects with PackageId and Path will be included.
     /// These are the projects available in the local file system.
     /// </summary>
-    /// <seealso cref="GraphFilter"/>
+    /// <seealso cref="NodeFilterType"/>
     [CommandOption("filter", 'f', Description = "Filter for the graph.")]
-    public GraphFilter Filter { get; init; } = GraphFilter.All;
+    public NodeFilterType Filter { get; init; } = NodeFilterType.All;
+
+    /// <summary>
+    /// Gets the list of projects to filter the graph by.
+    /// </summary>
+    [CommandOption("project-filter", Description = "Only show projects that depend on one of the listed projects.")]
+    public IReadOnlyList<string> ProjectFilter { get; init; } = [];
 
     /// <summary>
     /// Gets the type of the image file to generate.
     /// </summary>
     /// <seealso cref="ImageType"/>
     [CommandOption("image", 'i', Description = "Format of the image file.")]
-    public ImageType ImageType { get; init; } = ImageType.None;
+    public ImageTypes ImageType { get; init; } = ImageTypes.None;
 
     /// <summary>
     /// Gets the path to where to save the image file.
@@ -80,15 +96,26 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
         var projects = new ProjectFinder(this.fileSystem).FindProjects(this.Paths);
         var projectInformation = ExtractAllProjectsInformation(projects);
         var graph = new GraphFactory(this.fileSystem).CreateGraph(projectInformation, this.Filter);
-        var graphDot = GraphDotGenerator.GenerateGraphDot(graph);
 
-        await this.OutputGraph(console, graphDot);
+        if (this.ProjectFilter.Count > 0)
+        {
+            graph = graph.GetDependent(this.ProjectFilter);
+        }
+
+        await this.OutputGraph(console, graph);
+
+        if (this.ImageType != ImageTypes.None && string.IsNullOrEmpty(this.graphDot))
+        {
+            this.graphDot = graph.GenerateGraphDot();
+        }
 
         var imageCommand = new ImageCommand(this.fileSystem)
         {
-            DotGraph = graphDot,
+            DotGraph = this.graphDot,
             ImageType = this.ImageType,
             ImagePath = this.ImagePath,
+            EnableLogging = this.EnableLogging,
+            LogPath = this.LogPath,
         };
 
         await imageCommand.ExecuteAsync(console);
@@ -112,33 +139,38 @@ internal class ProgramCommand(IFileSystem fileSystem) : ICommand
     /// Outputs the graph to the console or to the file.
     /// </summary>
     /// <param name="console">Console abstraction for text output.</param>
-    /// <param name="graphDot">Dot representation of a graph.</param>
+    /// <param name="graph">Dependency graph.</param>
     /// <returns>Task with no return value.</returns>
-    private async Task OutputGraph(IConsole console, string graphDot)
+    private async Task OutputGraph(IConsole console, AdjacencyGraph<Node, Edge> graph)
+    {
+        if (this.OutputType.HasFlag(OutputTypes.GraphML))
+        {
+            this.graphML = graph.SerializeGraphToMLString();
+            await this.SaveOrShow(console, this.graphML, "graphml");
+        }
+
+        if (this.OutputType.HasFlag(OutputTypes.Dot))
+        {
+            this.graphDot = graph.GenerateGraphDot();
+            await this.SaveOrShow(console, this.graphDot, "dot");
+        }
+
+        if (this.OutputType.HasFlag(OutputTypes.ListProjects))
+        {
+            this.projectsList = graph.ToLineSeparatedNodeString();
+            await this.SaveOrShow(console, this.projectsList, "list");
+        }
+    }
+
+    private async Task SaveOrShow(IConsole console, string outputString, string extension)
     {
         if (string.IsNullOrWhiteSpace(this.OutputPath))
         {
-            await console.Output.WriteLineAsync(graphDot);
+            await console.Output.WriteLineAsync(outputString);
             return;
         }
 
-        new FileSaver(this.fileSystem).SaveStringToFile(graphDot, this.OutputPath);
+        new FileSaver(this.fileSystem).SaveStringToFile(outputString, this.OutputPath, extension);
         await console.Output.WriteLineAsync($"Graph was written to the file: {this.OutputPath}");
-    }
-
-    private async Task GenerateImages(string graph)
-    {
-        var imageGenerator = new GraphImageGenerator(graph);
-        if (this.ImageType == ImageType.Both || this.ImageType == ImageType.Svg)
-        {
-            var svgStream = new MemoryStream(await imageGenerator.GenerateGraphSvg());
-            new FileSaver(this.fileSystem).SaveStreamToFile(svgStream, this.ImagePath, "svg");
-        }
-
-        if (this.ImageType == ImageType.Both || this.ImageType == ImageType.Png)
-        {
-            var pngStream = new MemoryStream(await imageGenerator.GenerateGraphPng());
-            new FileSaver(this.fileSystem).SaveStreamToFile(pngStream, this.ImagePath, "png");
-        }
     }
 }

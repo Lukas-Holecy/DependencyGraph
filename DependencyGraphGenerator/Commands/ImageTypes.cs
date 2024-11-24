@@ -1,4 +1,4 @@
-// <copyright file="ImageType.cs" company="Lukas Holecy">
+// <copyright file="ImageTypes.cs" company="Lukas Holecy">
 // Copyright (c) Lukas Holecy. All rights reserved.
 // </copyright>
 
@@ -7,25 +7,26 @@ namespace Holecy.Console.Dependencies.Commands;
 /// <summary>
 /// Type of image to be generated.
 /// </summary>
-internal enum ImageType
+[Flags]
+internal enum ImageTypes
 {
     /// <summary>
     /// No image to be generated.
     /// </summary>
-    None,
+    None = 0,
 
     /// <summary>
     /// Graph in .dot format.
     /// </summary>
-    Svg,
+    Svg = 1 << 0,
 
     /// <summary>
     /// Graph in .png format.
     /// </summary>
-    Png,
+    Png = 1 << 1,
 
     /// <summary>
     /// Both .dot and .png formats.
     /// </summary>
-    Both,
+    All = Svg | Png,
 }

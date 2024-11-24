@@ -5,10 +5,11 @@
   <ItemGroup>
     <PackageVersion Include="CliFx" Version="2.3.5" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
+    <PackageVersion Include="DotNetGraph" Version="3.2.0" />
     <PackageVersion Include="jint" Version="4.1.0" />
     <PackageVersion Include="Magick.NET-Q8-AnyCPU" Version="14.0.0" />
     <PackageVersion Include="Magick.NET.Core" Version="14.0.0" />
-    <PackageVersion Include="Microsoft.Build" Version="17.12.6"/>
+    <PackageVersion Include="Microsoft.Build" Version="17.12.6" />
     <PackageVersion Include="Microsoft.Build.Locator" Version="1.7.8" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
@@ -24,6 +25,7 @@
     <PackageVersion Include="QuikGraph" Version="2.5.0" />
     <PackageVersion Include="QuikGraph.Graphviz" Version="2.5.0" />
     <PackageVersion Include="QuikGraph.MSAGL" Version="2.5.0" />
+    <PackageVersion Include="Quikgraph.Serialization" Version="2.5.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.12.9">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

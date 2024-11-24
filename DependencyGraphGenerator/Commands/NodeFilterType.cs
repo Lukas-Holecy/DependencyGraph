@@ -1,4 +1,4 @@
-// <copyright file="GraphFilter.cs" company="Lukas Holecy">
+// <copyright file="NodeFilterType.cs" company="Lukas Holecy">
 // Copyright (c) Lukas Holecy. All rights reserved.
 // </copyright>
 
@@ -7,7 +7,7 @@ namespace Holecy.Console.Dependencies.Commands;
 /// <summary>
 /// Specifies the filter for the graph.
 /// </summary>
-internal enum GraphFilter
+internal enum NodeFilterType
 {
     /// <summary>
     /// Represents a filter that includes all dependencies.

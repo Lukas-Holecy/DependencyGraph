@@ -4,14 +4,13 @@
 
 namespace Holecy.Console.Dependencies.Commands;
 
-using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
 using Holecy.Console.Dependencies.Graph;
-using Holecy.Console.Dependencies.ProjectFiles;
+using Holecy.Console.Dependencies.IO;
 
 /// <summary>
 /// Represents the main command responsible for processing specified file or directory paths and creating
@@ -28,7 +27,7 @@ internal class ImageCommand(IFileSystem fileSystem) : ICommand
     /// <summary>
     /// Gets positional parameter for paths (files or directories).
     /// </summary>
-    [CommandParameter(0, Name = "paths", Description = "Dot representation of a graph.", IsRequired = true)]
+    [CommandParameter(0, Name = "dot-graph", Description = "Dot representation of a graph.", IsRequired = true)]
     public string DotGraph { get; init; } = string.Empty;
 
     /// <summary>
@@ -48,7 +47,7 @@ internal class ImageCommand(IFileSystem fileSystem) : ICommand
     /// </summary>
     /// <seealso cref="ImageType"/>
     [CommandOption("image", 'i', Description = "Format of the image file.")]
-    public ImageType ImageType { get; init; } = ImageType.None;
+    public ImageTypes ImageType { get; init; } = ImageTypes.None;
 
     /// <summary>
     /// Gets the path to where to save the image file.
@@ -59,7 +58,7 @@ internal class ImageCommand(IFileSystem fileSystem) : ICommand
     /// <inheritdoc/>
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        if (this.ImageType != ImageType.None)
+        if (this.ImageType != ImageTypes.None)
         {
             await this.GenerateImages();
         }
@@ -68,13 +67,13 @@ internal class ImageCommand(IFileSystem fileSystem) : ICommand
     private async Task GenerateImages()
     {
         var imageGenerator = new GraphImageGenerator(this.DotGraph);
-        if (this.ImageType == ImageType.Both || this.ImageType == ImageType.Svg)
+        if (this.ImageType.HasFlag(ImageTypes.Svg))
         {
             var svgStream = new MemoryStream(await imageGenerator.GenerateGraphSvg());
             new FileSaver(this.fileSystem).SaveStreamToFile(svgStream, this.ImagePath, "svg");
         }
 
-        if (this.ImageType == ImageType.Both || this.ImageType == ImageType.Png)
+        if (this.ImageType.HasFlag(ImageTypes.Png))
         {
             var pngStream = new MemoryStream(await imageGenerator.GenerateGraphPng());
             new FileSaver(this.fileSystem).SaveStreamToFile(pngStream, this.ImagePath, "png");

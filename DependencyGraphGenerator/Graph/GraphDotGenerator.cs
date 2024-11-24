@@ -18,10 +18,9 @@ internal static class GraphDotGenerator
     /// </summary>
     /// <param name="graph">Dependency graph.</param>
     /// <returns>String with dot representation of the graph.</returns>
-    internal static string GenerateGraphDot(AdjacencyGraph<Node, Edge> graph)
+    internal static string GenerateGraphDot(this AdjacencyGraph<Node, Edge> graph)
     {
-        var dotGraph = graph.ToGraphviz(algorithm => GetGraphRenderAlgorithm(algorithm));
-        return dotGraph;
+        return graph.ToGraphviz(algorithm => GetGraphRenderAlgorithm(algorithm));
     }
 
     private static void GetGraphRenderAlgorithm(GraphvizAlgorithm<Node, Edge> algorithm)
