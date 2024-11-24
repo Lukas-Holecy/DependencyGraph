@@ -48,7 +48,7 @@ internal record class ProjectInformation : IProjectInformation
         sb.AppendLine("References:");
         foreach (IReference reference in this.References.Where(r => r != null))
         {
-            sb.AppendLine($"{reference.ToString()}");
+            sb.AppendLine($"{reference}");
         }
 
         return sb.ToString();

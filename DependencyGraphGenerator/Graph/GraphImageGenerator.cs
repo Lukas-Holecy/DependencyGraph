@@ -21,7 +21,7 @@ internal class GraphImageGenerator(string graphDot)
     /// <returns>Byte array with an svg image of the graph.</returns>
     internal async Task<byte[]> GenerateGraphSvg()
     {
-        await using var svgStream = await new GraphVizSvgGenerator().GenerateSVGStreamAsync(this.graphDot);
+        await using var svgStream = await GraphVizSvgGenerator.GenerateSVGStreamAsync(this.graphDot);
         if (svgStream.Length > 0)
         {
             var svgBytes = new byte[svgStream.Length];
@@ -39,7 +39,7 @@ internal class GraphImageGenerator(string graphDot)
     /// <returns>Byte array with an png image of the graph.</returns>
     internal async Task<byte[]> GenerateGraphPng()
     {
-        await using var pngStream = await new GraphVizSvgGenerator().GeneratePNGStreamAsync(this.graphDot);
+        await using var pngStream = await GraphVizSvgGenerator.GeneratePNGStreamAsync(this.graphDot);
         if (pngStream.Length > 0)
         {
             var svgBytes = new byte[pngStream.Length];

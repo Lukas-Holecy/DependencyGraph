@@ -29,7 +29,7 @@ internal static class GraphMLHandler
         graph.SerializeToGraphML<Node, Edge, AdjacencyGraph<Node, Edge>>(
             writer,
             node => node.ToString(), // Serialize node as "PackageId:{node.PackageId},Path:{node.Path}"
-            edge => graph.GetEdgeIdentity().ToString()); // $"{edge.Source}->{edge.Target}"); // Serialize edge as "Source->Target"
+            _ => graph.GetEdgeIdentity().ToString()); // $"{edge.Source}->{edge.Target}"); // Serialize edge as "Source->Target"
         writer.Flush();
         return stringBuilder.ToString();
     }
@@ -60,7 +60,7 @@ internal static class GraphMLHandler
                 var parts = id.Split(',');
                 return new Node(parts[1].RemovePrefix("PackageId:"), parts[1].RemovePrefix("Path:"));
             },
-            (source, target, id) => new Edge(source, target));
+            (source, target, _) => new Edge(source, target));
         return graph;
     }
 }

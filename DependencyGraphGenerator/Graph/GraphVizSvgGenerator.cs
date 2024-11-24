@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 /// <summary>
 /// Class for generating svg stream from dot input using GraphViz.
 /// </summary>
-public class GraphVizSvgGenerator
+public static class GraphVizSvgGenerator
 {
     /// <summary>
     /// Generates SVG stream from DOT input using GraphViz command line utility.
@@ -20,7 +20,7 @@ public class GraphVizSvgGenerator
     /// </summary>
     /// <param name="dotInput">Dot representation of a graph.</param>
     /// <returns>Memory stream with svg image in it.</returns>
-    public async Task<MemoryStream> GenerateSVGStreamAsync(string dotInput)
+    public static async Task<MemoryStream> GenerateSVGStreamAsync(string dotInput)
     {
         try
         {
@@ -39,7 +39,7 @@ public class GraphVizSvgGenerator
     /// </summary>
     /// <param name="dotInput">Dot representation of a graph.</param>
     /// <returns>Memory stream with svg image in it.</returns>
-    public async Task<MemoryStream> GeneratePNGStreamAsync(string dotInput)
+    public static async Task<MemoryStream> GeneratePNGStreamAsync(string dotInput)
     {
         try
         {
