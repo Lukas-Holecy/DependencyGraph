@@ -30,6 +30,8 @@ public static class Program
         return await new CliApplicationBuilder()
             .AddCommand<Commands.ProgramCommand>()
             .AddCommand<Commands.ListProjectsCommand>()
+            .AddCommand<Commands.DependencyCommand>()
+            .AddCommand<Commands.ImageCommand>()
             .UseTypeActivator(serviceProvider.GetService!)
             .Build()
             .RunAsync();
@@ -40,7 +42,9 @@ public static class Program
         var services = new ServiceCollection()
             .AddSingleton<IFileSystem, FileSystem>()
             .AddTransient<Commands.ProgramCommand>()
-            .AddTransient<Commands.ListProjectsCommand>();
+            .AddTransient<Commands.ListProjectsCommand>()
+            .AddTransient<Commands.DependencyCommand>()
+            .AddTransient<Commands.ImageCommand>();
 
         var serviceProvider = services.BuildServiceProvider();
         return serviceProvider;

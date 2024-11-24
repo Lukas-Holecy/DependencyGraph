@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="CliFx" />
+    <PackageReference Include="DotNetGraph" />
     <PackageReference Include="Microsoft.Build">
         <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
@@ -21,6 +22,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="QuikGraph" />
     <PackageReference Include="QuikGraph.Graphviz" />
+    <PackageReference Include="QuikGraph.Serialization" />
     <PackageReference Include="Roslynator.Analyzers" />
     <PackageReference Include="StyleCop.Analyzers" />
     <PackageReference Include="System.Drawing.Common" />

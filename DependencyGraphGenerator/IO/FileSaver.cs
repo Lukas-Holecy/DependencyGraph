@@ -2,7 +2,7 @@
 // Copyright (c) Lukas Holecy. All rights reserved.
 // </copyright>
 
-namespace Holecy.Console.Dependencies;
+namespace Holecy.Console.Dependencies.IO;
 
 using System;
 using System.IO;
@@ -24,12 +24,15 @@ public class FileSaver(IFileSystem fileSystem)
     /// <param name="path">Path to the file. This can be either a file path or directory.
     /// If directory is used, the file DependencyGraph.dot will be used.
     /// </param>
+    /// <param name="extension">
+    /// Extension of the file. If left empty, extension in the <paramref name="path"/> will be used.
+    /// </param>
     /// <returns>True if successful, false otherwise.</returns>
-    public bool SaveStringToFile(string content, string path)
+    public bool SaveStringToFile(string content, string path, string extension = "")
     {
         try
         {
-            var outputPath = this.GetDotFilePath(path);
+            var outputPath = this.GetDotFilePath(path, extension);
             string directoryPath = this.fileSystem.Path.GetDirectoryName(outputPath) ?? string.Empty;
             if (string.IsNullOrEmpty(directoryPath))
             {
@@ -69,7 +72,7 @@ public class FileSaver(IFileSystem fileSystem)
     {
         try
         {
-            var outputPath = this.GetDotFilePath(path);
+            var outputPath = this.GetDotFilePath(path, extension);
             if (!string.IsNullOrEmpty(extension))
             {
                 outputPath = this.fileSystem.Path.ChangeExtension(outputPath, extension);
@@ -87,7 +90,6 @@ public class FileSaver(IFileSystem fileSystem)
                 this.fileSystem.Directory.CreateDirectory(directoryPath);
             }
 
-            // Overwrite the file with UTF-8 encoding
             this.fileSystem.File.WriteAllBytes(outputPath, content.ToArray());
             Console.WriteLine($"File saved successfully at: {path}");
             return true;
@@ -99,24 +101,30 @@ public class FileSaver(IFileSystem fileSystem)
         }
     }
 
-    private string GetDotFilePath(string outputPath)
+    private string GetDotFilePath(string outputPath, string extension)
     {
         if (this.fileSystem.Path.HasExtension(outputPath) && this.fileSystem.File.Exists(outputPath))
         {
-            return this.GetFilePath(outputPath);
+            return this.GetFilePath(outputPath, extension);
         }
 
-        return this.GetDirectoryPath(outputPath);
+        return this.GetDirectoryPath(outputPath, extension);
     }
 
-    private string GetDirectoryPath(string outputPath)
+    private string GetDirectoryPath(string outputPath, string extension)
     {
-        var fullPath = this.fileSystem.Path.Combine(outputPath, "DependencyGraph.dot");
-        return this.GetFilePath(fullPath);
+        var fullPath = this.fileSystem.Path.Combine(outputPath, "DependencyGraph");
+        fullPath = this.fileSystem.Path.ChangeExtension(fullPath, extension);
+        return this.GetFilePath(fullPath, extension);
     }
 
-    private string GetFilePath(string outputPath)
+    private string GetFilePath(string outputPath, string extension)
     {
+        if (!string.IsNullOrEmpty(extension))
+        {
+            outputPath = this.fileSystem.Path.ChangeExtension(outputPath, extension);
+        }
+
         try
         {
             // FileInfo will throw if the path is invalid

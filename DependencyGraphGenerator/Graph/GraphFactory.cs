@@ -22,15 +22,16 @@ internal class GraphFactory(IFileSystem fileSystem)
     /// <param name="projectsInformation">information about discovered .net projects.</param>
     /// <param name="filter">Filter for the graph.</param>
     /// <returns>New graph objects with directional edges between projects and their dependencies.</returns>
-    public AdjacencyGraph<Node, Edge> CreateGraph(HashSet<IProjectInformation> projectsInformation, GraphFilter filter)
+    public AdjacencyGraph<Node, Edge> CreateGraph(
+        HashSet<IProjectInformation> projectsInformation, NodeFilterType filter)
     {
         var nodes = NodeFactory.CreateNodes(projectsInformation);
-        if (filter == GraphFilter.PathAndPackage)
+        if (filter == NodeFilterType.PathAndPackage)
         {
             nodes = GetFilteredNodesWithPathAndPackageId(nodes);
         }
 
-        if (filter == GraphFilter.LocalPath)
+        if (filter == NodeFilterType.LocalPath)
         {
             nodes = this.GetFilteredNodesWithLocalId(nodes);
         }

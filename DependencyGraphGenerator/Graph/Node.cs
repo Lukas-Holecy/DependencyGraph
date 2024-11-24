@@ -100,9 +100,13 @@ internal class Node
         return this.PackageId == other.PackageId || this.Path == other.Path;
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Returns a string that represents the current object.
+    /// Format of the string is PackageId:{this.PackageId},Path:{this.Path}.
+    /// </summary>
+    /// <returns>A string that represents the current object.</returns>
     public override string ToString()
     {
-        return string.IsNullOrEmpty(this.PackageId) ? this.Path : $"{this.PackageId}, {this.Path}";
+        return $"PackageId:{this.PackageId},Path:{this.Path}";
     }
 }

@@ -11,8 +11,11 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
             "args": [
-                    "${workspaceFolder}\\..\\..\\Repos\\OfficeUtilities", "${workspaceFolder}\\..\\..\\Repos\\WordTools", "${workspaceFolder}\\..\\..\\Repos\\iManageUtilities", "${workspaceFolder}\\..\\..\\Repos\\ExcelUtilities", "${workspaceFolder}\\..\\..\\Repos\\PowerPointUtilities",
-                    "--output",  "${workspaceFolder}\\..\\Output\\"
+                    "${workspaceFolder}/../../Repos/OfficeUtilities", "${workspaceFolder}/../../Repos/WordTools", "${workspaceFolder}/../../Repos/iManageUtilities", "${workspaceFolder}/../../Repos/ExcelUtilities", "${workspaceFolder}/../../Repos/PowerPointUtilities",
+                    "--output-path",  "${workspaceFolder}/out/",
+                    "--output-type", "all",
+                    "--image", "all",
+                    "--image-path", "${workspaceFolder}/out/",
                 ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
@@ -25,11 +28,49 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
             "args": [
-                    "${workspaceFolder}\\..\\..\\Repos\\OfficeUtilities", "${workspaceFolder}\\..\\..\\Repos\\WordTools", "${workspaceFolder}\\..\\..\\Repos\\iManageUtilities", "${workspaceFolder}\\..\\..\\Repos\\ExcelUtilities", "${workspaceFolder}\\..\\..\\Repos\\PowerPointUtilities",
-                    "--output",  "${workspaceFolder}\\..\\Output\\",
+                    "${workspaceFolder}/../../Repos/OfficeUtilities", "${workspaceFolder}/../../Repos/WordTools", "${workspaceFolder}/../../Repos/iManageUtilities", "${workspaceFolder}/../../Repos/ExcelUtilities", "${workspaceFolder}/../../Repos/PowerPointUtilities",
+                    "--output-type", "all",
+                    "--output-path",  "${workspaceFolder}/out/",
                     "--filter", "LocalPath",
-                    "--image", "both",
-                    "--image-path", "${workspaceFolder}\\..\\Output\\"
+                    "--image", "all",
+                    "--image-path", "${workspaceFolder}/out/",
+                ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console":  "internalConsole"
+        },
+        {
+            "name": "Project Filter",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
+            "args": [
+                    "${workspaceFolder}/../../Repos/OfficeUtilities", "${workspaceFolder}/../../Repos/WordTools", "${workspaceFolder}/../../Repos/iManageUtilities", "${workspaceFolder}/../../Repos/ExcelUtilities", "${workspaceFolder}/../../Repos/PowerPointUtilities",
+                    "--output-path",  "${workspaceFolder}/out/",
+                    "--output-type", "all",
+                    "--image", "all",
+                    "--image-path", "${workspaceFolder}/out/",
+                    "--project-filter", "Brochet.Common.Common", "Brochet.Common.DataSetLibrary"
+                ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console":  "internalConsole"
+        },
+        {
+            "name": "Project Filter Local Only",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
+            "args": [
+                    "${workspaceFolder}/../../Repos/OfficeUtilities", "${workspaceFolder}/../../Repos/WordTools", "${workspaceFolder}/../../Repos/iManageUtilities", "${workspaceFolder}/../../Repos/ExcelUtilities", "${workspaceFolder}/../../Repos/PowerPointUtilities",
+                    "--output-type", "all",
+                    "--output-path",  "${workspaceFolder}/out/",
+                    "--filter", "LocalPath",
+                    "--image", "all",
+                    "--image-path", "${workspaceFolder}/out/",
+                    "--project-filter", "Brochet.Common.Common", "Brochet.Common.DataSetLibrary"
                 ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
@@ -42,8 +83,8 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
             "args": [
-                    "${workspaceFolder}\\..\\..\\Repos\\OfficeUtilities\\OfficeUtilities\\PluginHandler\\PluginHandler.csproj",
-                    "--output",  "${workspaceFolder}\\..\\Output\\"
+                    "${workspaceFolder}/../../Repos/OfficeUtilities/OfficeUtilities/PluginHandler/PluginHandler.csproj",
+                    "--output-path",  "${workspaceFolder}/out/",
                 ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
@@ -56,8 +97,8 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
             "args": [
-                    "${workspaceFolder}\\..\\..\\repos\\OfficeUtilities",
-                    "--output",  "${workspaceFolder}\\..\\Output\\"
+                    "${workspaceFolder}/../../repos/OfficeUtilities",
+                    "--output-path",  "${workspaceFolder}/out/",
                 ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
@@ -70,13 +111,28 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
             "args": [
-                    "${workspaceFolder}\\..\\..\\repos\\OfficeUtilities",
-                    "--output",  "${workspaceFolder}\\..\\Output\\",
+                    "${workspaceFolder}/../../repos/OfficeUtilities",
+                    "--output-path",  "${workspaceFolder}/out/",
                     "--filter", "LocalPath"
                 ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console":  "internalConsole"
+        },
+        {
+            "name": "DependencyCommand",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
+            "args": [
+                "show-dependent",
+                "${workspaceFolder}/out/DependencyGraph.graphml",
+                "Brochet.Common.Common"
+            ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "internalConsole"
         },
         {
             "name": "No Arguments",
@@ -95,7 +151,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
-            "args": ["list-projects", "${workspaceFolder}\\..\\..\\"],
+            "args": ["list-projects", "${workspaceFolder}/../../"],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console":  "internalConsole"
