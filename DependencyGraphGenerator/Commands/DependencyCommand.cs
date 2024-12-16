@@ -13,8 +13,8 @@ using Holecy.Console.Dependencies.Graph;
 using QuikGraph;
 
 /// <summary>
-/// Represents the main command responsible for processing specified file or directory paths and creating
-/// dependency graph.
+/// Represents the command responsible for listing all dependent projects of the specified project or projects in the
+/// graphML serialized graph.
 /// </summary>
 [Command("show-dependent", Description = "Shows projects that are transitionally dependent of the specified project.")]
 internal class DependencyCommand(IFileSystem fileSystem) : ICommand
@@ -25,13 +25,15 @@ internal class DependencyCommand(IFileSystem fileSystem) : ICommand
     private readonly IFileSystem fileSystem = fileSystem;
 
     /// <summary>
-    /// Gets positional parameter for paths (files or directories).
+    /// Gets positional parameter for path to the ML serialized graph.
+    /// This graph will be used to find dependent projects and must hold
+    /// the project dependencies of which we want to find.
     /// </summary>
     [CommandParameter(0, Name = "graphml-file-path", Description = "Dot representation of a graph.", IsRequired = true)]
     public string GraphMLPath { get; init; } = string.Empty;
 
     /// <summary>
-    /// Gets positional parameter for paths (files or directories).
+    /// Gets positional parameter with list of project ids of which we want to find dependent projects.
     /// </summary>
     [CommandParameter(1, Name = "project-ids", Description = "Full path to the project or it's package id.", IsRequired = true)]
     public IReadOnlyList<string> ProjectIds { get; init; } = [];

@@ -13,8 +13,7 @@ using Holecy.Console.Dependencies.Graph;
 using Holecy.Console.Dependencies.IO;
 
 /// <summary>
-/// Represents the main command responsible for processing specified file or directory paths and creating
-/// dependency graph.
+/// Represents the command responsible for creating an image of the specified graph.
 /// </summary>
 [Command("create-image", Description = "Creates an image of the specified graph.")]
 internal class ImageCommand(IFileSystem fileSystem) : ICommand
