@@ -6,6 +6,7 @@ namespace Holecy.Console.Dependencies.Graph;
 
 using System.Text;
 using QuikGraph;
+using QuikGraph.Algorithms;
 
 /// <summary>
 /// Extension method for converting a graph to a list of nodes.
@@ -13,17 +14,18 @@ using QuikGraph;
 internal static class GraphExtensions
 {
     /// <summary>
-    /// Converts a graph to a list of nodes.
+    /// Converts a graph to a list of nodes topologically sorted.
     /// </summary>
     /// <param name="graph">DependencyGraph.</param>
     /// <returns>String where each line is an individual node.</returns>
     public static string ToLineSeparatedNodeString(this AdjacencyGraph<Node, Edge> graph)
     {
         var sb = new StringBuilder();
+        var nodes = graph.TopologicalSort();
 
-        foreach (var vertex in graph.Vertices)
+        foreach (var node in nodes)
         {
-            sb.AppendLine(vertex.ToString());
+            sb.AppendLine(node.ToString());
         }
 
         return sb.ToString();
