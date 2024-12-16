@@ -120,7 +120,7 @@
             "console":  "internalConsole"
         },
         {
-            "name": "DependencyCommand",
+            "name": "Show Dependent",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
