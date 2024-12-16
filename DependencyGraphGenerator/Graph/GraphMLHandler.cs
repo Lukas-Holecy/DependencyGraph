@@ -58,7 +58,7 @@ internal static class GraphMLHandler
             id =>
             {
                 var parts = id.Split(',');
-                return new Node(parts[1].RemovePrefix("PackageId:"), parts[1].RemovePrefix("Path:"));
+                return new Node(parts[0].RemovePrefix("PackageId:"), parts[1].RemovePrefix("Path:"));
             },
             (source, target, _) => new Edge(source, target));
         return graph;
