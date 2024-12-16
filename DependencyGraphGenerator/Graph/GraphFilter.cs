@@ -28,7 +28,8 @@ internal static class GraphFilter
         this AdjacencyGraph<Node, Edge> originalGraph, IEnumerable<string> filterProjects)
     {
         var nodes = originalGraph.Vertices.Where(
-            node => filterProjects.Contains(node.PackageId) || filterProjects.Contains(node.Path));
+            node => filterProjects.Contains(node.PackageId, StringComparer.InvariantCultureIgnoreCase) ||
+             filterProjects.Contains(node.Path, StringComparer.InvariantCultureIgnoreCase));
 
         return GetDependent(originalGraph, nodes);
     }
@@ -71,7 +72,7 @@ internal static class GraphFilter
             depthSearch.Compute();
         }
 
-        return GenerateSubgraph(visitedNodes, visitedEdges);
+        return GenerateSubgraph(visitedNodes, visitedEdges).Reverse();
     }
 
     private static AdjacencyGraph<Node, Edge> GenerateSubgraph(HashSet<Node> visitedNodes, HashSet<Edge> visitedEdges)
