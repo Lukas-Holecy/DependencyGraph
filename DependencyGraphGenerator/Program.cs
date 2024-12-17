@@ -28,6 +28,7 @@ public static class Program
         var serviceProvider = SetUpDependencyInjection();
 
         return await new CliApplicationBuilder()
+            .SetExecutableName("DependencyGraphGenerator.exe")
             .AddCommand<Commands.ProgramCommand>()
             .AddCommand<Commands.ListProjectsCommand>()
             .AddCommand<Commands.DependencyCommand>()
