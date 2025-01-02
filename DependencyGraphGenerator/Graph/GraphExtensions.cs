@@ -21,7 +21,7 @@ internal static class GraphExtensions
     public static string ToLineSeparatedNodeString(this AdjacencyGraph<Node, Edge> graph)
     {
         var sb = new StringBuilder();
-        var nodes = graph.TopologicalSort();
+        var nodes = graph.TopologicalSort().Reverse();
 
         foreach (var node in nodes)
         {
