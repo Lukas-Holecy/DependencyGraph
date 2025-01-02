@@ -155,7 +155,10 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/DependencyGraphGenerator/bin/debug/net9.0/DependencyGraphGenerator.exe",
-            "args": ["list-projects", "${workspaceFolder}/../../"],
+            "args": [
+                 "${workspaceFolder}/../../repos/OfficeUtilities",
+                "--output-type", "ListProjects",
+                "--filter", "LocalPath"],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console":  "internalConsole"
